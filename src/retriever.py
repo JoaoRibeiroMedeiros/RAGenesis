@@ -1,20 +1,29 @@
-
 import torch
-from transformers import AutoTokenizer, AutoModel
+from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
+import faiss
+import numpy as np
+import gradio as gr
 
 # Documents corpus (replace these with your actual documents)
-documents = [
-    "Deep learning is a subset of machine learning.",
-    "Natural Language Processing is a fascinating field.",
-    "GPT models are quite powerful for text generation.",
-    "Autonomous vehicles use multiple AI technologies.",
-    "Python is a popular programming language."
-]
+
+def chunk_bible(file_path):
+    verses = []
+
+    with open(file_path, 'r') as file:
+        for line in file:
+            # Split the line at the first tab to separate the reference and the text
+            reference, text = line.split("\t", 1)
+            verses.append((reference.strip(), text.strip()))
+    
+    return verses
+
+documents = chunk_bible('sacred_data/bible.txt')
 
 
 # Load a transformer model for embeddings
 tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
 model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+
 
 def encode(texts):
     encoded_input = tokenizer(texts, padding=True, truncation=True, return_tensors='pt')
