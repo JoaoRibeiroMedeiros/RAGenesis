@@ -1,38 +1,16 @@
 import torch
 from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
+from src.chunker import chunk_bible
+from src.tokenizer import encode
 import faiss
 import numpy as np
 import gradio as gr
 
 # Documents corpus (replace these with your actual documents)
 
-def chunk_bible(file_path):
-    verses = []
-    with open(file_path, 'r') as file:
-        for line in file:
-            try:
-            # Split the line at the first tab to separate the reference and the text
-                reference, text = line.split("\t", 1)
-                verses.append((reference.strip(), text.strip()))
-            except: continue
-    return verses
-
 documents = chunk_bible('sacred_data/bible.txt')
-
-
-# Load a transformer model for embeddings
-tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
-model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
-
-
-def encode(texts):
-    encoded_input = tokenizer(texts, padding=True, truncation=True, return_tensors='pt')
-    with torch.no_grad():
-        model_output = model(**encoded_input)
-    embeddings = model_output.last_hidden_state.mean(dim=1)
-    return embeddings.cpu().numpy()
-
 document_embeddings = encode(documents)
+
 index = faiss.IndexFlatL2(document_embeddings.shape[1])
 index.add(document_embeddings)
 
