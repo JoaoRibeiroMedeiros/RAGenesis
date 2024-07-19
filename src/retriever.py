@@ -32,9 +32,6 @@ def encode(texts):
     embeddings = model_output.last_hidden_state.mean(dim=1)
     return embeddings.cpu().numpy()
 
-document_embeddings = encode(documents)
-index = faiss.IndexFlatL2(document_embeddings.shape[1])
-index.add(document_embeddings)
 
 gpt2_tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 gpt2_model = GPT2LMHeadModel.from_pretrained("gpt2")
@@ -47,6 +44,11 @@ def generate_response(query, retrieved_docs):
     return response
 
 def rag_system(query):
+    documents = chunk_bible('sacred_data/bible.txt')
+    document_embeddings = encode(documents)
+
+    index = faiss.IndexFlatL2(document_embeddings.shape[1])
+    index.add(document_embeddings)
     # Step 1: Retrieve relevant documents
     query_embedding = encode([query])[0]
     top_k = 3  # Number of documents to retrieve
