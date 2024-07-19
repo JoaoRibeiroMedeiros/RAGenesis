@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
 from src.chunker import chunk_bible
-from src.tokenizer import encode
+from embedder import encode
 from src.generation import generate_response
 from src.retriever import rag_system
 import faiss
@@ -19,14 +19,14 @@ from langchain.vectorstores.azuresearch import AzureSearch
 from azure.core.credentials import AzureKeyCredential
 
 # Configure the baseline configuration of the OpenAI library for Azure OpenAI Service.
-OPENAI_API_KEY = "PLEASE_ENTER_YOUR_OWNED_AOAI_SERVICE_KEY"
-OPENAI_API_BASE = "https://PLESAE_ENTER_YOUR_OWNED_AOAI_RESOURCE_NAME.openai.azure.com/"
-OPENAI_DEPLOYMENT_NAME = "PLEASE_ENTER_YOUR_OWNED_AOAI_GPT35TURBO_MODEL_NAME"
-OPENAI_MODEL_NAME = "gpt-35-turbo"
-OPENAI_EMBEDDING_DEPLOYMENT_NAME = "PLEASE_ENTER_YOUR_OWNED_AOAI_EMBEDDING_MODEL_NAME"
-OPENAI_EMBEDDING_MODEL_NAME = "text-embedding-ada-002"
-OPENAI_API_VERSION = "2023-05-15"
-OPENAI_API_TYPE = "azure"
+# OPENAI_API_KEY = "PLEASE_ENTER_YOUR_OWNED_AOAI_SERVICE_KEY"
+# OPENAI_API_BASE = "https://PLESAE_ENTER_YOUR_OWNED_AOAI_RESOURCE_NAME.openai.azure.com/"
+# OPENAI_DEPLOYMENT_NAME = "PLEASE_ENTER_YOUR_OWNED_AOAI_GPT35TURBO_MODEL_NAME"
+# OPENAI_MODEL_NAME = "gpt-35-turbo"
+# OPENAI_EMBEDDING_DEPLOYMENT_NAME = "PLEASE_ENTER_YOUR_OWNED_AOAI_EMBEDDING_MODEL_NAME"
+# OPENAI_EMBEDDING_MODEL_NAME = "text-embedding-ada-002"
+# OPENAI_API_VERSION = "2023-05-15"
+# OPENAI_API_TYPE = "azure"
 
 openai.api_key = OPENAI_API_KEY
 openai.api_base = OPENAI_API_BASE
