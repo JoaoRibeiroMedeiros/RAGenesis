@@ -58,13 +58,3 @@ def rag_system(query):
     # Step 2: Generate a response using the retrieved documents
     response = generate_response(query, retrieved_docs)
     return response
-
-iface = gr.Interface(
-    fn=rag_system, 
-    inputs="text", 
-    outputs="text",
-    title="Retrieval-Augmented Generation",
-    description="A simple POC for retrieval-augmented generation using Gradio."
-)
-
-iface.launch()
