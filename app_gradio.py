@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
 from src.chunker import chunk_bible
-from src.tokenizer import encode
+from embedder import encode
 from src.generation import generate_response
 from src.retriever import rag_system
 import faiss
@@ -9,8 +9,6 @@ import numpy as np
 import gradio as gr
 
 # Documents corpus (replace these with your actual documents)
-
-
 
 
 iface = gr.Interface(

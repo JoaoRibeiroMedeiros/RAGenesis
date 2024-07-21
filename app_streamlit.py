@@ -12,11 +12,11 @@ import openai
 import streamlit as st
 from streamlit_chat import message
 
-from langchain.chains.question_answering import load_qa_chain
-from langchain.chat_models import AzureChatOpenAI
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores.azuresearch import AzureSearch
-from azure.core.credentials import AzureKeyCredential
+# from langchain.chains.question_answering import load_qa_chain
+# from langchain.chat_models import AzureChatOpenAI
+# from langchain.embeddings.openai import OpenAIEmbeddings
+# from langchain.vectorstores.azuresearch import AzureSearch
+# from azure.core.credentials import AzureKeyCredential
 
 # Configure the baseline configuration of the OpenAI library for Azure OpenAI Service.
 # OPENAI_API_KEY = "PLEASE_ENTER_YOUR_OWNED_AOAI_SERVICE_KEY"
