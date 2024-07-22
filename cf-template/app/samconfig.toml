@@ -1,0 +1,11 @@
+version = 0.1
+[dev.deploy.parameters]
+stack_name = "ragenesis-app"
+resolve_s3 = true
+s3_prefix = "ragenesis-app"
+region = "us-east-1"
+profile = "janu-dev"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "InstanceType=\"t2.micro\" KeyName=\"\" ScriptS3Bucket=\"\" ScriptS3Key=\"\""
+image_repositories = []
