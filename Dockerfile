@@ -1,21 +1,20 @@
-# Use an official Python runtime as a parent image
+# Use the official lightweight Python image.
 FROM python:3.9-slim
 
-# Set the working directory in the container
+# Set the working directory in the container.
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the requirements file into the container.
+COPY requirements.txt requirements.txt
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip
+# Install the python dependencies.
 RUN pip install -r requirements.txt
 
-# Make port 8501 available to the world outside this container
+# Copy the rest of the working directory contents into the container at /app.
+COPY . .
+
+# Expose the port that streamlit is running on.
 EXPOSE 8501
 
-# Define environment variable
-ENV NAME World
-
-# Run streamlit when the container launches
-CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Command to run the app, assuming your main Streamlit script is named app.py
+CMD ["streamlit", "run", "app_streamlit.py", "--server.port=8501", "--server.address=0.0.0.0"]
