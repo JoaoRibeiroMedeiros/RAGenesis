@@ -15,6 +15,7 @@ docs = text_splitter.split_documents(documents)
 
 # Perform embeddings and store in Milvus
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
 vector_db = Milvus.from_documents(
     docs,
     embeddings,
