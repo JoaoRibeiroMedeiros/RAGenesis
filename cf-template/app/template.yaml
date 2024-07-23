@@ -43,7 +43,7 @@ Resources:
         Protocol: "HTTP"
         Path: "/health"
         Interval: 10
-        Timeout: 5
+        Timeout: 10
         HealthyThreshold: 3
         UnhealthyThreshold: 3
       NetworkConfiguration:
