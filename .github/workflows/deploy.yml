@@ -20,6 +20,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Log in to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -35,17 +36,19 @@ jobs:
         run: |
           echo "Tagging Docker image..."
           IMAGE_TAG="${{ secrets.ECR_REPOSITORY }}:latest"
-          docker tag ${{ secrets.ECR_REPOSITORY }} $IMAGE_TAG
+          REPOSITORY_URI="${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}"
+          docker tag ${{ secrets.ECR_REPOSITORY }} $REPOSITORY_URI:latest
 
       - name: Push Docker image to ECR
         run: |
           echo "Pushing Docker image to ECR..."
-          docker push ${{ secrets.ECR_REPOSITORY }}:latest
+          REPOSITORY_URI="${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}"
+          docker push $REPOSITORY_URI:latest
 
       - name: Deploy to AWS App Runner
         run: |
           echo "Deploying to AWS App Runner..."
-          aws apprunner update-service --service-arn "arn:aws:apprunner:${{ secrets.AWS_REGION }}:${{ github.repository_owner }}:service/${{ secrets.APP_RUNNER_SERVICE_NAME }}" --source-configuration "ImageRepository={ImageIdentifier=${{ secrets.ECR_REPOSITORY }}:latest,ImageRepositoryType=ECR}"
+          aws apprunner update-service --service-arn "arn:aws:apprunner:${{ secrets.AWS_REGION }}:${{ github.repository_owner }}:service/${{ secrets.APP_RUNNER_SERVICE_NAME }}" --source-configuration "ImageRepository={ImageIdentifier=${REPOSITORY_URI}:latest,ImageRepositoryType=ECR}"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
