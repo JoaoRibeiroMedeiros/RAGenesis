@@ -1,40 +1,63 @@
 AWSTemplateFormatVersion: '2010-09-09'
+
 Resources:
+  AppRunnerECRAccessRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "AppRunnerECRAccessRole"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'build.apprunner.amazonaws.com'  # Corrected service principal
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: "AppRunnerServicePolicy"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ecr:GetDownloadUrlForLayer'
+                  - 'ecr:BatchGetImage'
+                  - 'ecr:BatchCheckLayerAvailability'
+                Resource: "arn:aws:ecr:us-east-1:975050138131:repository/ragenesis"
+
   MyAppRunnerService:
     Type: AWS::AppRunner::Service
+    DependsOn: AppRunnerECRAccessRole  # Ensures the role is created first
     Properties: 
       ServiceName: "MyStreamlitAppRunnerService"
       SourceConfiguration:
         AuthenticationConfiguration:
-          # Uncomment and set values if using a private repository
-          ConnectionArn: arn:aws:codestar-connections:us-east-1:975050138131:connection/CONNECTION_ID
+          AccessRoleArn: !GetAtt AppRunnerECRAccessRole.Arn
         ImageRepository:
-          ImageIdentifier: "975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest"  # Your Docker image located in Amazon ECR
-          ImageRepositoryType: "ECR"  # Using ECR for images in Elastic Container Registry
-        Port: "8501"  # Streamlit's default port
+          ImageIdentifier: "975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest"
+          ImageRepositoryType: "ECR"
       InstanceConfiguration:
-        Cpu: "1 vCPU"  # Adjust to your requirements: 1 vCPU, 2 vCPU, 4 vCPU
-        Memory: "2 GB"  # Adjust to your requirements: 2 GB, 4 GB
+        Cpu: "1 vCPU"
+        Memory: "2 GB"
+        # InstanceRoleArn: !GetAtt AppRunnerECRAccessRole.Arn
       HealthCheckConfiguration:
         Protocol: "HTTP"
-        Path: "/health"  # Implement a health check endpoint if /health is not yet available
-        Interval: 10  # Time between health checks in seconds
-        Timeout: 5  # Time to wait for a response from the health check in seconds
-        HealthyThreshold: 3  # Number of consecutive checks before considering the service healthy
-        UnhealthyThreshold: 3  # Number of consecutive checks before considering the service unhealthy
+        Path: "/health"
+        Interval: 10
+        Timeout: 5
+        HealthyThreshold: 3
+        UnhealthyThreshold: 3
       NetworkConfiguration:
         EgressConfiguration:
-          EgressType: "DEFAULT"  # Use "VPC" if you want to use a VPC Connector
-          # VpcConnectorArn: "YOUR_VPC_CONNECTOR_ARN"  # Uncomment if using a VPC Connector
+          EgressType: "DEFAULT"
       AutoScalingConfigurationArn: !Ref MyAutoScalingConfiguration
 
   MyAutoScalingConfiguration:
     Type: AWS::AppRunner::AutoScalingConfiguration
     Properties:
       AutoScalingConfigurationName: "MyAppRunnerAutoScaling"
-      MaxConcurrency: 25  # Maximum number of concurrent requests an instance can handle
-      MinSize: 1  # Minimum number of instances
-      MaxSize: 5  # Maximum number of instances
+      MaxConcurrency: 25
+      MinSize: 1
+      MaxSize: 5
 
 Outputs:
   ServiceURL:
