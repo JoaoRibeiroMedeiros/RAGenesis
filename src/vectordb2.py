@@ -2,7 +2,6 @@
 from pymilvus import connections, utility, FieldSchema, CollectionSchema, DataType, Collection
 import numpy as np
 from sentence_transformers import SentenceTransformer
-
 from chunker import chunk_bible
 
 
@@ -30,13 +29,10 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 
 
 # Documents corpus (replace these with your actual documents)
+verses = chunk_bible('sacred_data/bible.txt')
 
-
-def rag_system(query):
-    documents = chunk_bible('sacred_data/bible.txt')
-    document_embeddings = encode(documents)
 # Generate embeddings
-embeddings = model.encode(sentences)
+embeddings = model.encode(verses)
 
 # Convert embeddings to list
 embeddings_list = embeddings.tolist()
