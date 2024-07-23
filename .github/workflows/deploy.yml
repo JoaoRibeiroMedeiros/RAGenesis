@@ -1,0 +1,49 @@
+name: Build and Deploy to ECR and App Runner
+
+on:
+  push:
+    branches:
+      - main
+  # Optionally, you can trigger the workflow on pull requests
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        run: |
+          echo "Building Docker image..."
+          docker build -t ${{ secrets.ECR_REPOSITORY }} .
+
+      - name: Tag Docker image
+        run: |
+          echo "Tagging Docker image..."
+          IMAGE_TAG="${{ secrets.ECR_REPOSITORY }}:latest"
+          docker tag ${{ secrets.ECR_REPOSITORY }} $IMAGE_TAG
+
+      - name: Push Docker image to ECR
+        run: |
+          echo "Pushing Docker image to ECR..."
+          docker push ${{ secrets.ECR_REPOSITORY }}:latest
+
+      - name: Deploy to AWS App Runner
+        run: |
+          echo "Deploying to AWS App Runner..."
+          aws apprunner update-service --service-arn "arn:aws:apprunner:${{ secrets.AWS_REGION }}:${{ github.repository_owner }}:service/${{ secrets.APP_RUNNER_SERVICE_NAME }}" --source-configuration "ImageRepository={ImageIdentifier=${{ secrets.ECR_REPOSITORY }}:latest,ImageRepositoryType=ECR}"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
