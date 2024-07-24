@@ -1,7 +1,15 @@
 import numpy as np
 import streamlit as st
+from src.chunker import chunk_bible
+
+
 
 st.title('Hello World!')
+
+verses = chunk_bible('sacred_data/bible.txt')
+
+for i in range(1000,2000,1):
+    st.text(verses[i])
 
 
 # import torch
