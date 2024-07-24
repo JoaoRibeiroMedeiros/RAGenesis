@@ -1,3 +1,9 @@
+import numpy as np
+import streamlit as st
+
+st.title('Hello World!')
+
+
 # import torch
 # from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
 # from src.chunker import chunk_bible
@@ -6,14 +12,6 @@
 # from src.retriever import rag_system
 # # import faiss
 # import openai
-
-import numpy as np
-import streamlit as st
-
-st.set_option('server.port', 8080)
-
-st.title('Hello World!')
-
 
 # from streamlit_chat import message
 
