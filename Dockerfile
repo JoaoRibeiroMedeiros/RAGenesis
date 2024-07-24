@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 8080
 
 # Command to run the app, assuming your main Streamlit script is named app.py
-CMD ["streamlit", "run", "app_streamlit.py", "--server.port=8080", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "app_streamlit.py", "--server.port=8080", "--server.address=0.0.0.0", "--server.enableCORS=false"]
