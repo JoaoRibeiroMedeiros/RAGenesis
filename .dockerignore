@@ -1,0 +1,22 @@
+# Ignore credentials directory
+credentials/
+
+# Ignore environment variable files
+.env
+.venv
+
+# Ignore git workflows
+.gitignore
+.github
+
+# Ignore any Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Ignore log files
+*.log
+
+# Ignore any other files or folders you don't want
+cf-template
+
+# Ignore log files
