@@ -1,0 +1,20 @@
+version = 0.1
+[dev.deploy.parameters]
+stack_name = "roles"
+resolve_s3 = true
+s3_prefix = "roles"
+region = "us-east-1"
+profile = "janu-dev"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+image_repositories = []
+
+[default.deploy.parameters]
+stack_name = "roles"
+resolve_s3 = true
+s3_prefix = "roles"
+region = "us-east-1"
+profile = "janu-dev"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+image_repositories = []

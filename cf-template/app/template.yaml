@@ -1,37 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Resources:
-  AppRunnerECRAccessRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      RoleName: "AppRunnerECRAccessRole"
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: 'build.apprunner.amazonaws.com'  # Corrected service principal
-            Action: 'sts:AssumeRole'
-      Policies:
-        - PolicyName: "AppRunnerServicePolicy"
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - 'ecr:GetDownloadUrlForLayer'
-                  - 'ecr:BatchGetImage'
-                  - 'ecr:BatchCheckLayerAvailability'
-                Resource: "arn:aws:ecr:us-east-1:975050138131:repository/ragenesis"
-
   MyAppRunnerService:
     Type: AWS::AppRunner::Service
-    DependsOn: AppRunnerECRAccessRole  # Ensures the role is created first
     Properties: 
       ServiceName: "MyStreamlitAppRunnerService"
       SourceConfiguration:
         AuthenticationConfiguration:
-          AccessRoleArn: !GetAtt AppRunnerECRAccessRole.Arn
+          AccessRoleArn: !ImportValue AppRunnerECRAccessRoleARN
         ImageRepository:
           ImageIdentifier: "975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest"
           ImageRepositoryType: "ECR"

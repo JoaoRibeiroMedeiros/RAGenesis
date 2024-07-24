@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  AppRunnerECRAccessRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'build.apprunner.amazonaws.com'  # Corrected service principal
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: "AppRunnerServicePolicy"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ecr:BatchCheckLayerAvailability'
+                  - 'ecr:BatchDeleteImage'
+                  - 'ecr:BatchGetImage'
+                  - 'ecr:CompleteLayerUpload'
+                  - 'ecr:CreateRepository'
+                  - 'ecr:DeleteLifecyclePolicy'
+                  - 'ecr:DeleteRegistryPolicy'
+                  - 'ecr:DeleteRepository'
+                  - 'ecr:DeleteRepositoryPolicy'
+                  - 'ecr:DescribeImageReplicationStatus'
+                  - 'ecr:DescribeImageScanFindings'
+                  - 'ecr:DescribeImages'
+                  - 'ecr:DescribePullThroughCacheRules'
+                  - 'ecr:DescribeRegistry'
+                  - 'ecr:DescribeRepositories'
+                  - 'ecr:GetAuthorizationToken'
+                  - 'ecr:GetDownloadUrlForLayer'
+                  - 'ecr:GetLifecyclePolicy'
+                  - 'ecr:GetLifecyclePolicyPreview'
+                  - 'ecr:GetRegistryPolicy'
+                  - 'ecr:GetRegistryScanningConfiguration'
+                  - 'ecr:GetRepositoryPolicy'
+                  - 'ecr:InitiateLayerUpload'
+                  - 'ecr:ListImages'
+                  - 'ecr:ListTagsForResource'
+                  - 'ecr:PutImage'
+                  - 'ecr:PutImageScanningConfiguration'
+                  - 'ecr:PutImageTagMutability'
+                  - 'ecr:PutLifecyclePolicy'
+                  - 'ecr:PutRegistryPolicy'
+                  - 'ecr:PutRegistryScanningConfiguration'
+                  - 'ecr:PutReplicationConfiguration'
+                  - 'ecr:SetRepositoryPolicy'
+                  - 'ecr:StartImageScan'
+                  - 'ecr:StartLifecyclePolicyPreview'
+                  - 'ecr:TagResource'
+                  - 'ecr:UntagResource'
+                  - 'ecr:UploadLayerPart'
+                Resource: "*"
+
+Outputs:
+  AppRunnerECRAccessRoleARN:
+      Value: !GetAtt AppRunnerECRAccessRole.Arn
+      Description: ECR access role for app runner
+      Export:
+          Name: AppRunnerECRAccessRoleARN
+
+
