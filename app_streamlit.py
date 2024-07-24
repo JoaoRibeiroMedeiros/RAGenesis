@@ -1,10 +1,10 @@
-import torch
+# import torch
 # from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
-from src.chunker import chunk_bible
-from embedder import encode
-from src.generation import generate_response
-from src.retriever import rag_system
-# import faiss
+# from src.chunker import chunk_bible
+# from embedder import encode
+# from src.generation import generate_response
+# from src.retriever import rag_system
+# # import faiss
 import numpy as np
 # Documents corpus (replace these with your actual documents)
 
@@ -12,7 +12,6 @@ import numpy as np
 import streamlit as st
 
 st.title('Hello World!')
-
 
 
 # from streamlit_chat import message
