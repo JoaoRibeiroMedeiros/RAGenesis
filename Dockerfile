@@ -18,5 +18,5 @@ COPY . .
 # Expose the port that Gradio is running on.
 EXPOSE 8080
 
-# Command to run the Gradio app on port 8080
-CMD ["python", "-m", "gradio", "app_gradio.py", "--server.port=8080", "--server.address=0.0.0.0"]
+# Command to run the Gradio app, assuming your main Gradio script is named app_gradio.py
+CMD ["python", "app_gradio.py"]
