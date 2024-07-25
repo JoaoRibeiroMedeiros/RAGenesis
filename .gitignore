@@ -1,4 +1,6 @@
 .env
 .venv
+.venv_gr
 credentials
 */.aws*
+teste.py

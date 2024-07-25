@@ -4,6 +4,7 @@ credentials/
 # Ignore environment variable files
 .env
 .venv
+.venv_gr
 
 # Ignore git workflows
 .gitignore
@@ -18,5 +19,6 @@ __pycache__/
 
 # Ignore any other files or folders you don't want
 cf-template
+teste.py
 
 # Ignore log files

@@ -11,12 +11,21 @@ import gradio as gr
 # Documents corpus (replace these with your actual documents)
 
 
-iface = gr.Interface(
-    fn=rag_system, 
-    inputs="text", 
-    outputs="text",
-    title="Retrieval-Augmented Generation",
-    description="A simple POC for retrieval-augmented generation using Gradio."
-)
+# iface = gr.Interface(
+#     fn=rag_system, 
+#     inputs="text", 
+#     outputs="text",
+#     title="Retrieval-Augmented Generation",
+#     description="A simple POC for retrieval-augmented generation using Gradio."
+# )
+
+def reverse_text(input_text):
+    return input_text[::-1]
+
+iface = gr.Interface(fn=reverse_text, 
+                     inputs="text", 
+                     outputs="text", 
+                     title="Text Reverser", 
+                     description="Enter text to see it reversed.")
 
 iface.launch()
