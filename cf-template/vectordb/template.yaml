@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation Template to Deploy EC2 with Milvus
+
+Parameters:
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: 't3.medium'
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+    ConstraintDescription: Must be a valid EC2 instance type.
+
+  KeyName:
+    Default: MilvusKeyPair
+    Description: Name of an existing EC2 KeyPair to enable SSH access.
+    Type: AWS::EC2::KeyPair::KeyName
+
+Resources:
+  MilvusInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: ami-0427090fd1714168b  # Replace with the latest Ubuntu AMI in your region
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref MilvusSecurityGroup
+
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+              set -e
+              # exec > /var/log/user-data.log 2>&1
+              
+              # echo "Updating package index..."
+              sudo yum update -y
+
+              # echo "Installing Docker..."
+              sudo yum install docker -y
+              sudo service docker start
+              sudo systemctl enable docker
+
+              # Create a docker-compose.yml file
+              # echo "Creating docker-compose.yml..."
+              cat <<EOT >> /home/ec2-user/docker-compose.yml  # Use ec2-user for Amazon Linux
+              version: '3.3'
+              services:
+                milvus:
+                  image: milvusdb/milvus:latest
+                  environment:
+                    - MILVUS_DB_DIR=/milvus/db
+                  ports:
+                    - "19530:19530"  # Milvus gRPC port
+                    - "19121:19121"  # Milvus HTTP port
+                  volumes:
+                    - milvus_data:/milvus/db
+              volumes:
+                milvus_data:
+              EOT
+
+              # Install docker-compose
+              # echo "Installing docker-compose..."
+              sudo yum install -y python3-pip
+              sudo pip3 install docker-compose
+
+              # Pull and run Milvus with Docker Compose
+              # echo "Starting Milvus with Docker Compose..."
+              cd /home/ec2-user  # Use ec2-user for Amazon Linux
+              sudo docker-compose up -d
+              # echo "User Data Script Completed"  
+  MilvusSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Milvus EC2 instance
+      # VpcId: !Ref VPCId  # Make sure you have a VPC ID or use the default
+      # Allow inbound traffic on the required ports
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22                # Add this line for SSH
+          ToPort: 22                  # Add this line for SSH
+          CidrIp: 0.0.0.0/0  
+        - IpProtocol: tcp
+          FromPort: 19530
+          ToPort: 19530
+          CidrIp: 0.0.0.0/0   # Replace with appropriate CIDR for better security
+        - IpProtocol: tcp
+          FromPort: 19121
+          ToPort: 19121
+          CidrIp: 0.0.0.0/0   # Replace with appropriate CIDR for better security
+
+Outputs:
+  InstancePublicIP:
+    Description: Public IP of the EC2 instance
+    Value: !GetAtt MilvusInstance.PublicIp
+  InstanceId:
+    Description: Instance ID of the EC2 instance
+    Value: !Ref MilvusInstance

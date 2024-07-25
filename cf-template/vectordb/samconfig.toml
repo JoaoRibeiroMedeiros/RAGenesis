@@ -1,0 +1,11 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "vectordb"
+resolve_s3 = true
+s3_prefix = "vectordb"
+region = "us-east-1"
+profile = "janu-dev"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "InstanceType=\"t3.medium\" KeyName=\"MilvusKeyPair\""
+image_repositories = []
