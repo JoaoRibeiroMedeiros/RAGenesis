@@ -1,12 +1,13 @@
 import torch
 from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
 from chunker import chunk_bible
+from embedder import encode
+from generation import generate_response
 import faiss
 import numpy as np
 import gradio as gr
 
 # Documents corpus (replace these with your actual documents)
-
 
 def rag_system(query):
     documents = chunk_bible('sacred_data/bible.txt')
