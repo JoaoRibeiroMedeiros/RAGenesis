@@ -1,10 +1,10 @@
-import torch
-from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
-from src.chunker import chunk_bible
-from embedder import encode
-from src.generation import generate_response
-from src.retriever import rag_system
-import faiss
+# import torch
+# from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
+# from src.chunker import chunk_bible
+# from embedder import encode
+# from src.generation import generate_response
+# from src.retriever import rag_system
+# import faiss
 import numpy as np
 import gradio as gr
 
@@ -28,4 +28,5 @@ iface = gr.Interface(fn=reverse_text,
                      title="Text Reverser", 
                      description="Enter text to see it reversed.")
 
-iface.launch()
+iface.launch(server_port=8080, server_name="0.0.0.0")
+
