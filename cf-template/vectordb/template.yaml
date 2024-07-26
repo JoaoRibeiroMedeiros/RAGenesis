@@ -47,32 +47,15 @@ Resources:
               sudo service docker start
               sudo systemctl enable docker
 
+              # Install docker-compose
+              sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+              
               # Create a docker-compose.yml file
               # echo "Creating docker-compose.yml..."
-              cat <<EOT >> /home/ec2-user/docker-compose.yml  # Use ec2-user for Amazon Linux
-              version: '3.3'
-              services:
-                milvus:
-                  image: milvusdb/milvus:latest
-                  environment:
-                    - MILVUS_DB_DIR=/milvus/db
-                  ports:
-                    - "19530:19530"  # Milvus gRPC port
-                    - "19121:19121"  # Milvus HTTP port
-                  volumes:
-                    - milvus_data:/milvus/db
-              volumes:
-                milvus_data:
-              EOT
-
-              # Install docker-compose
-              # echo "Installing docker-compose..."
-              sudo yum install -y python3-pip
-              sudo pip3 install docker-compose
-
-              # Pull and run Milvus with Docker Compose
-              # echo "Starting Milvus with Docker Compose..."
-              cd /home/ec2-user  # Use ec2-user for Amazon Linux
+              sudo wget https://github.com/milvus-io/milvus/releases/download/v2.0.2/milvus-standalone-docker-compose.yml -O docker-compose.yml
+              
+              # echo "Running docker compose"
               sudo docker-compose up -d
               # echo "User Data Script Completed"  
   MilvusSecurityGroup:
