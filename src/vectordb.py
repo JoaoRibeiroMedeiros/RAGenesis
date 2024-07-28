@@ -25,8 +25,8 @@ verses = chunk_bible('sacred_data/bible.txt')
 # Extracting just the text portions and references from each tuple
 verses_text = [verse[1] for verse in verses]
 verses_references = [verse[0] for verse in verses]
-# %%   
 
+# %%   
 # Generate embeddings
 embeddings = model.encode(verses_text)
 
@@ -34,9 +34,6 @@ embeddings = model.encode(verses_text)
 
 # Connect to Milvus
 connections.connect(alias="default", host=ec2_public_ip, port="19530")
-
-# %%
-len(embeddings[0])
 
 # %%
 
@@ -52,10 +49,10 @@ fields = [
 
 # Create a schema
 schema = CollectionSchema(fields, description="Collection for embeddings")
+
 # %%
 # Create a collection
 collection_name = "embeddings_collection"
-
 
 # Drop the existing collection if it exists
 if utility.has_collection(collection_name):
