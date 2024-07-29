@@ -1,14 +1,8 @@
-# import torch
-# from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
-# from src.chunker import chunk_bible
-# from embedder import encode
-# from src.generation import generate_response
-# from src.retriever import rag_system
-# import faiss
-
 import numpy as np
 import gradio as gr
-from src.retriever import query_holy_text
+from src.retriever import *
+# from src.generation import generate_response
+
 # Documents corpus (replace these with your actual documents)
 
 with open('config.json', 'r') as file:
