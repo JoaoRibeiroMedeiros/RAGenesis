@@ -5,28 +5,18 @@
 # from src.generation import generate_response
 # from src.retriever import rag_system
 # import faiss
+
 import numpy as np
 import gradio as gr
-
+from src.retriever import query_holy_text
 # Documents corpus (replace these with your actual documents)
 
 
-# iface = gr.Interface(
-#     fn=rag_system, 
-#     inputs="text", 
-#     outputs="text",
-#     title="Retrieval-Augmented Generation",
-#     description="A simple POC for retrieval-augmented generation using Gradio."
-# )
-
-def reverse_text(input_text):
-    return input_text[::-1]
-
-iface = gr.Interface(fn=reverse_text, 
+iface = gr.Interface(fn=query_holy_text, 
                      inputs="text", 
                      outputs="text", 
-                     title="Text Reverser", 
-                     description="Enter text to see it reversed.")
+                     title="Query the Bible verses!", 
+                     description="Describe a subject you are interested in. AI will help you find the most relevant Bible verses for it!")
 
 iface.launch(server_port=8080, server_name="0.0.0.0")
 
