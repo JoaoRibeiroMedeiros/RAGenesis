@@ -4,3 +4,4 @@
 credentials
 */.aws*
 teste.py
+src/vectordb_ref.py
