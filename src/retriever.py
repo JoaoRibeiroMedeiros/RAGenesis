@@ -67,7 +67,8 @@ def main():
         config = json.load(file)
         # Fetch the EC2 public IP
     ec2_public_ip = config['EC2_PUBLIC_IP']
-    query = "God is love"
+
+    query = "love is all you need"
     results_as_dicts = query_holy_text(ec2_public_ip, query)
     
     for result in results_as_dicts:
