@@ -11,7 +11,7 @@ def connect_and_query_holy_text(query):
         config = json.load(file)
     # Fetch the EC2 public IP
     ec2_public_ip = config['EC2_PUBLIC_IP']
-    results_as_dicts = query_holy_text(query, ec2_public_ip)
+    results_as_dicts = query_holy_text(ec2_public_ip, query)
     results_as_text = [result["reference"]+ ' - '+ result["verse"] for result in results_as_dicts]
     return results_as_text
 
