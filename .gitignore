@@ -7,3 +7,4 @@ cf-template/iam/.aws-sam
 cf-template/vectordb/.aws-sam
 teste.py
 src/vectordb_ref.py
+flagged
