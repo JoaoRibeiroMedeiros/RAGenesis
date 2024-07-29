@@ -2,6 +2,8 @@
 .venv
 .venv_gr
 credentials
-*/.aws*
+cf-template/app/.aws-sam
+cf-template/iam/.aws-sam
+cf-template/vectordb/.aws-sam
 teste.py
 src/vectordb_ref.py
