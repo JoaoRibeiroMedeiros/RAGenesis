@@ -6,10 +6,14 @@ from src.chunker import chunk_bible
 
 st.title('Hello World!')
 
-verses = chunk_bible('sacred_data/bible.txt')
+st.text('Genesis 1:6	And God said, Let there be a firmament in the middle of the waters, and let it divide the waters from the waters.')
 
-for i in range(1000,2000,1):
-    st.text(verses[i])
+
+
+# verses = chunk_bible('sacred_data/bible.txt')
+# for i in range(1000,2000,1):
+#     st.text(verses[i])
+
 
 
 # import torch
