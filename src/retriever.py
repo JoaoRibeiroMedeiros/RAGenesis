@@ -4,8 +4,9 @@
 from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
 from src.embedder import encode
 from pymilvus import connections, Collection
+from sentence_transformers import SentenceTransformer
 import numpy as np
-
+import json
 # Documents corpus (replace these with your actual documents)
 
 # Step 3: Create a function to retrieve similar data
@@ -21,7 +22,7 @@ def retrieve_similar(collection, query_embedding, top_k=10):
         param=search_params,
         limit=top_k,
         expr=None,
-        output_fields=["reference","embedding"]
+        output_fields=["reference","verse","embedding"]
     )
     
     return results
@@ -33,25 +34,16 @@ def from_query_results_to_dicts(results):
         for hit in hits:
             hit_dict = {
                 "reference": hit.entity.reference, 
+                "verse": hit.entity.verse, 
                 "embedding": hit.entity.embedding,                  # Access the ID of the hit
             }
             results_as_dicts.append(hit_dict)
     return results_as_dicts
 
-# %%
-
-def main():
-    import json
-    
-    from sentence_transformers import SentenceTransformer
 
 
-    # Read the config file
-    with open('credentials/config.json', 'r') as file:
-        config = json.load(file)
-    # Fetch the EC2 public IP
-    ec2_public_ip = config['EC2_PUBLIC_IP']
-
+def query_holy_text(ec2_public_ip, query):
+   
     # Step 1: Connect to Milvus
     connections.connect(alias="default", host=ec2_public_ip, port="19530")
 
@@ -59,19 +51,27 @@ def main():
     collection = Collection(collection_name)
 
     model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-
-    query = "sex"
-
     query_embedding = model.encode(query)
 
     collection.load()  # Load collection
-
     results = retrieve_similar(collection, query_embedding)
     results_as_dicts = from_query_results_to_dicts(results)
 
-    for result in results_as_dicts:
+    return results_as_dicts
 
-        print(result["reference"], model.decode(result["embedding"]))
+# %%
+
+def main():
+    
+    with open('credentials/config.json', 'r') as file:
+        config = json.load(file)
+        # Fetch the EC2 public IP
+    ec2_public_ip = config['EC2_PUBLIC_IP']
+    query = "God is love"
+    results_as_dicts = query_holy_text(ec2_public_ip, query)
+    
+    for result in results_as_dicts:
+        print(result["reference"], result["verse"])
     
     
     
