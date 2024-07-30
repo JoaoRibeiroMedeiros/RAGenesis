@@ -17,7 +17,7 @@ st.title('Augmented Genesis')
 
 st.text("Describe a subject you are interested in. AI will help you find the most relevant Bible verses for it!")
 
-query = st.sidebar.string_input('Enter Query', value = 'God is love')
+query = st.sidebar.text_input('Enter Query', value = 'God is love')
 
 query_results = connect_and_query_holy_text(query)
 
