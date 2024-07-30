@@ -1,72 +1,33 @@
-import numpy as np
+
 import streamlit as st
-from src.chunker import chunk_bible
+from src.retriever import *
+
+def connect_and_query_holy_text(query):
+
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+    # Fetch the EC2 public IP
+    ec2_public_ip = config['EC2_PUBLIC_IP']
+    results_as_dicts = query_holy_text(ec2_public_ip, query)
+    results_as_text = [result["reference"]+ ' - '+ result["verse"] for result in results_as_dicts]
+    return results_as_text
+
+
+st.title('Augmented Genesis')
+
+st.text("Describe a subject you are interested in. AI will help you find the most relevant Bible verses for it!")
+
+query = st.sidebar.string_input('Enter Query', value = 'God is love')
+
+query_results = connect_and_query_holy_text(query)
+
+for verse in query_results
+    st.text("")
+    st.text(verse)
+    st.text("")
 
 
 
-st.title('Hello World!')
-
-st.text('Genesis 1:6	And God said, Let there be a firmament in the middle of the waters, and let it divide the waters from the waters.')
-
-
-
-# verses = chunk_bible('sacred_data/bible.txt')
-# for i in range(1000,2000,1):
-#     st.text(verses[i])
-
-
-
-# import torch
-# from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
-# from src.chunker import chunk_bible
-# from src.embedder import encode
-# from src.generation import generate_response
-# from src.retriever import rag_system
-# # import faiss
-# import openai
-
-# from streamlit_chat import message
-
-# from langchain.chains.question_answering import load_qa_chain
-# from langchain.chat_models import AzureChatOpenAI
-# from langchain.embeddings.openai import OpenAIEmbeddings
-# from langchain.vectorstores.azuresearch import AzureSearch
-# from azure.core.credentials import AzureKeyCredential
-
-# Configure the baseline configuration of the OpenAI library for Azure OpenAI Service.
-# OPENAI_API_KEY = "PLEASE_ENTER_YOUR_OWNED_AOAI_SERVICE_KEY"
-# OPENAI_API_BASE = "https://PLESAE_ENTER_YOUR_OWNED_AOAI_RESOURCE_NAME.openai.azure.com/"
-# OPENAI_DEPLOYMENT_NAME = "PLEASE_ENTER_YOUR_OWNED_AOAI_GPT35TURBO_MODEL_NAME"
-# OPENAI_MODEL_NAME = "gpt-35-turbo"
-# OPENAI_EMBEDDING_DEPLOYMENT_NAME = "PLEASE_ENTER_YOUR_OWNED_AOAI_EMBEDDING_MODEL_NAME"
-# OPENAI_EMBEDDING_MODEL_NAME = "text-embedding-ada-002"
-# OPENAI_API_VERSION = "2023-05-15"
-# OPENAI_API_TYPE = "azure"
-
-# openai.api_key = OPENAI_API_KEY
-# openai.api_base = OPENAI_API_BASE
-# openai.api_version = OPENAI_API_VERSION
-# openai.api_type = OPENAI_API_TYPE
-
-# AZURE_COGNITIVE_SEARCH_ENDPOINT_NAME = "https://PLESAE_ENTER_YOUR_OWNED_ACS_RESOURCE_NAME.search.windows.net"
-# AZURE_COGNITIVE_SEARCH_INDEX_NAME = "PLEASE_ENTER_YOUR_OWNED_ACS_INDEX_NAME"
-# AZURE_COGNITIVE_SEARCH_KEY = "PLEASE_ENTER_YOUR_OWNED_ACS_SERVICE_KEY"
-# acs_credential = AzureKeyCredential(AZURE_COGNITIVE_SEARCH_KEY)
-
-# # Set web page title and icon.
-# st.set_page_config(
-#     page_title="Chatbot with PDF",
-#     page_icon=":robot:"
-# )
-
-# # Set web page title and markdown.
-# st.title('Chatbot with PDF')
-# st.markdown(
-#     """
-#     This is the demonstration of a chatbot with PDF with Azure OpenAI, Azure Cognitive Search, and Streamlit.
-#     I read the book Machine Learning Yearning by Andrew Ng. Please ask me any questions about this book.
-#     """
-# )
 
 
 # # Define a function to get user input.

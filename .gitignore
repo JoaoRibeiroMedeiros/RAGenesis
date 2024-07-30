@@ -1,5 +1,5 @@
 .env
-.venv
+.venv_st
 .venv_gr
 credentials
 cf-template/app/.aws-sam
