@@ -21,7 +21,7 @@ query = st.sidebar.string_input('Enter Query', value = 'God is love')
 
 query_results = connect_and_query_holy_text(query)
 
-for verse in query_results
+for verse in query_results:
     st.text("")
     st.text(verse)
     st.text("")
