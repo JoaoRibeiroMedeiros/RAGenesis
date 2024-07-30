@@ -1,7 +1,5 @@
 
 # %%
-
-from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
 from src.embedder import encode
 from pymilvus import connections, Collection
 from sentence_transformers import SentenceTransformer
