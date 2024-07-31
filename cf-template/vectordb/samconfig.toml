@@ -7,5 +7,5 @@ region = "us-east-1"
 profile = "janu-dev"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "InstanceType=\"t3.medium\" KeyName=\"MilvusKeyPair\""
+parameter_overrides = "InstanceType=\"c5n.xlarge\" KeyName=\"MilvusKeyPair\""
 image_repositories = []
