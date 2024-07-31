@@ -43,7 +43,7 @@ Resources:
             sudo systemctl enable docker
             # Download the installation script
             sudo curl -sfL https://raw.githubusercontent.com/milvus-io/milvus/master/scripts/standalone_embed.sh -o standalone_embed.sh
-            sudo standalone_embed.sh start
+            sudo bash standalone_embed.sh start
 
   MilvusSecurityGroup:
     Type: AWS::EC2::SecurityGroup
