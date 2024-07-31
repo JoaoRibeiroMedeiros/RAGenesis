@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Resources:
-  AppRunnerECRAccessRole:
+  EC2ECRAccessRole:
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -9,10 +9,10 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Service: 'build.apprunner.amazonaws.com'  # Corrected service principal
+              Service: 'ec2.amazonaws.com'
             Action: 'sts:AssumeRole'
       Policies:
-        - PolicyName: "AppRunnerServicePolicy"
+        - PolicyName: "EC2ECRAccessPolicy"
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
@@ -58,11 +58,15 @@ Resources:
                   - 'ecr:UploadLayerPart'
                 Resource: "*"
 
+  EC2ECRAccessInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !Ref EC2ECRAccessRole
+
 Outputs:
-  AppRunnerECRAccessRoleARN:
-      Value: !GetAtt AppRunnerECRAccessRole.Arn
-      Description: ECR access role for app runner
-      Export:
-          Name: AppRunnerECRAccessRoleARN
-
-
+  EC2ECRAccessRoleARN:
+    Value: !GetAtt EC2ECRAccessRole.Arn
+    Description: IAM Role ARN for EC2 instance to access ECR
+    Export:
+      Name: EC2ECRAccessRoleARN
