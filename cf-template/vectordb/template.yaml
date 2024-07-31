@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: CloudFormation Template to Deploy EC2 with Milvus
+Description: CloudFormation Template to Deploy EC2 with Milvus and ECR Access
 
 Parameters:
   InstanceType:
@@ -31,52 +31,43 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !Ref MilvusSecurityGroup
-
+      IamInstanceProfile: !Ref EC2InstanceProfile
       UserData:
         Fn::Base64:
           !Sub |
             #!/bin/bash
-              set -e
-              # exec > /var/log/user-data.log 2>&1
-              
-              # echo "Updating package index..."
-              sudo yum update -y
+            set -e
+            sudo yum update -y
+            sudo yum install docker -y
+            sudo service docker start
+            sudo systemctl enable docker
+            # Download the installation script
+            sudo curl -sfL https://raw.githubusercontent.com/milvus-io/milvus/master/scripts/standalone_embed.sh -o standalone_embed.sh
+            sudo standalone_embed.sh start
 
-              # echo "Installing Docker..."
-              sudo yum install docker -y
-              sudo service docker start
-              sudo systemctl enable docker
-
-              # Install docker-compose
-              sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-              sudo chmod +x /usr/local/bin/docker-compose
-              
-              # Create a docker-compose.yml file
-              # echo "Creating docker-compose.yml..."
-              sudo wget https://github.com/milvus-io/milvus/releases/download/v2.0.2/milvus-standalone-docker-compose.yml -O docker-compose.yml
-              
-              # echo "Running docker compose"
-              sudo docker-compose up -d
-              # echo "User Data Script Completed"  
   MilvusSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Security group for Milvus EC2 instance
-      # VpcId: !Ref VPCId  # Make sure you have a VPC ID or use the default
-      # Allow inbound traffic on the required ports
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 22                # Add this line for SSH
-          ToPort: 22                  # Add this line for SSH
-          CidrIp: 0.0.0.0/0  
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 19530
           ToPort: 19530
-          CidrIp: 0.0.0.0/0   # Replace with appropriate CIDR for better security
+          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 19121
           ToPort: 19121
-          CidrIp: 0.0.0.0/0   # Replace with appropriate CIDR for better security
+          CidrIp: 0.0.0.0/0
+
+  EC2InstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !ImportValue EC2ECRAccessRoleARN
 
 Outputs:
   InstancePublicIP:
