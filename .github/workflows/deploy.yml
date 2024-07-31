@@ -1,4 +1,4 @@
-name: Build and Deploy to ECR and App Runner
+name: Build and Deploy to ECR 
 
 on:
   push:
