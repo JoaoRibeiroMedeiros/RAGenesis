@@ -5,6 +5,7 @@ credentials/
 .env
 .venv
 .venv_gr
+.venv_st
 
 # Ignore git workflows
 .gitignore
