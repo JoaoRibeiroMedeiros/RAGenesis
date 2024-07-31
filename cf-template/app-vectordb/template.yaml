@@ -5,7 +5,7 @@ Parameters:
   InstanceType:
     Description: EC2 instance type
     Type: String
-    Default: 'c5n.xlarge'
+    Default: 'c5.2xlarge'
     AllowedValues:
       - t2.micro
       - t2.small
@@ -15,6 +15,7 @@ Parameters:
       - t3.medium
       - t3.large
       - c5n.xlarge
+      - c5.2xlarge
     ConstraintDescription: Must be a valid EC2 instance type.
 
   KeyName:
