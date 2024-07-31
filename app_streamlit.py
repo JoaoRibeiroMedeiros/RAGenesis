@@ -13,7 +13,7 @@ def connect_and_query_holy_text(query):
     return results_as_text
 
 
-st.title('Augmented Genesis')
+st.title('Retrieval Augmented Genesis!')
 
 st.text("Describe a subject you are interested in. AI will help you find the most relevant Bible verses for it!")
 
