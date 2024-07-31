@@ -31,7 +31,7 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !Ref MilvusSecurityGroup
-      IamInstanceProfile: !Ref EC2InstanceProfile
+      IamInstanceProfile: !Ref EC2ECRInstanceProfile
       UserData:
         Fn::Base64:
           !Sub |
@@ -63,11 +63,68 @@ Resources:
           ToPort: 19121
           CidrIp: 0.0.0.0/0
 
-  EC2InstanceProfile:
+  EC2ECRRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'ec2.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: "EC2ECRAccessPolicy"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ecr:BatchCheckLayerAvailability'
+                  - 'ecr:BatchDeleteImage'
+                  - 'ecr:BatchGetImage'
+                  - 'ecr:CompleteLayerUpload'
+                  - 'ecr:CreateRepository'
+                  - 'ecr:DeleteLifecyclePolicy'
+                  - 'ecr:DeleteRegistryPolicy'
+                  - 'ecr:DeleteRepository'
+                  - 'ecr:DeleteRepositoryPolicy'
+                  - 'ecr:DescribeImageReplicationStatus'
+                  - 'ecr:DescribeImageScanFindings'
+                  - 'ecr:DescribeImages'
+                  - 'ecr:DescribePullThroughCacheRules'
+                  - 'ecr:DescribeRegistry'
+                  - 'ecr:DescribeRepositories'
+                  - 'ecr:GetAuthorizationToken'
+                  - 'ecr:GetDownloadUrlForLayer'
+                  - 'ecr:GetLifecyclePolicy'
+                  - 'ecr:GetLifecyclePolicyPreview'
+                  - 'ecr:GetRegistryPolicy'
+                  - 'ecr:GetRegistryScanningConfiguration'
+                  - 'ecr:GetRepositoryPolicy'
+                  - 'ecr:InitiateLayerUpload'
+                  - 'ecr:ListImages'
+                  - 'ecr:ListTagsForResource'
+                  - 'ecr:PutImage'
+                  - 'ecr:PutImageScanningConfiguration'
+                  - 'ecr:PutImageTagMutability'
+                  - 'ecr:PutLifecyclePolicy'
+                  - 'ecr:PutRegistryPolicy'
+                  - 'ecr:PutRegistryScanningConfiguration'
+                  - 'ecr:PutReplicationConfiguration'
+                  - 'ecr:SetRepositoryPolicy'
+                  - 'ecr:StartImageScan'
+                  - 'ecr:StartLifecyclePolicyPreview'
+                  - 'ecr:TagResource'
+                  - 'ecr:UntagResource'
+                  - 'ecr:UploadLayerPart'
+                Resource: "*"
+
+  EC2ECRInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
     Properties:
       Roles:
-        - !ImportValue EC2ECRAccessRoleARN
+        - !Ref EC2ECRRole
 
 Outputs:
   InstancePublicIP:

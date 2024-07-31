@@ -1,8 +1,8 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "vectordb"
+stack_name = "app-vectordb"
 resolve_s3 = true
-s3_prefix = "vectordb"
+s3_prefix = "app-vectordb"
 region = "us-east-1"
 profile = "janu-dev"
 confirm_changeset = true
