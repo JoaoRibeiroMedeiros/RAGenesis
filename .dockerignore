@@ -3,6 +3,7 @@ credentials/
 
 # Ignore environment variable files
 .env
+.env_test
 .venv
 .venv_gr
 .venv_st

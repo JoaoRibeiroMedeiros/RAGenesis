@@ -1,4 +1,5 @@
 .env
+.env_test
 .venv_st
 .venv_gr
 credentials
