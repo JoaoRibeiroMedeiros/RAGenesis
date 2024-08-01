@@ -5,7 +5,7 @@ Parameters:
   InstanceType:
     Description: EC2 instance type
     Type: String
-    Default: 'c5.2xlarge'
+    Default: 'c5.xlarge'
     AllowedValues:
       - t2.micro
       - t2.small
@@ -37,7 +37,7 @@ Resources:
         - DeviceName: /dev/sdh  # Specify the device name for the EBS volume
           Ebs:
             VolumeSize: 32  # Size of the EBS volume in GiB
-            VolumeType: gp2  # Choose the volume type (gp2, gp3, etc.)
+            VolumeType: gp3  # Choose the volume type (gp2, gp3, etc.)
             DeleteOnTermination: true  # Delete volume when instance is terminated
       UserData:
         Fn::Base64:
