@@ -8,7 +8,7 @@ from src.chunker import chunk_bible
 import json
 
 # Read the config file
-with open('credentials/config.json', 'r') as file:
+with open('config.json', 'r') as file:
     config = json.load(file)
 
 # Fetch the EC2 public IP
