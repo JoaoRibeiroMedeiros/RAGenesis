@@ -58,17 +58,21 @@ Resources:
     Properties:
       GroupDescription: Security group for Milvus EC2 instance
       SecurityGroupIngress:
-        - IpProtocol: tcp
+        - IpProtocol: tcp # MILVUS_PORT
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
+        - IpProtocol: tcp # MILVUS_PORT
           FromPort: 19530
           ToPort: 19530
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
+        - IpProtocol: tcp # MILVUS_PORT
           FromPort: 19121
           ToPort: 19121
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp # STREAMLIT_PORT
+          FromPort: 8501
+          ToPort: 8501
           CidrIp: 0.0.0.0/0
 
   EC2ECRRole:
