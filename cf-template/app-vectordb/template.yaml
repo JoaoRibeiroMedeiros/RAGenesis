@@ -34,7 +34,7 @@ Resources:
         - !Ref MilvusSecurityGroup
       IamInstanceProfile: !Ref EC2ECRInstanceProfile
       BlockDeviceMappings:
-        - DeviceName: /dev/sdh  # Specify the device name for the EBS volume
+        - DeviceName: /dev/xvda  # Specify the device name for the EBS volume
           Ebs:
             VolumeSize: 32  # Size of the EBS volume in GiB
             VolumeType: gp3  # Choose the volume type (gp2, gp3, etc.)
