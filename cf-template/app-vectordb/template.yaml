@@ -53,7 +53,7 @@ Resources:
             sudo bash standalone_embed.sh start
             aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 975050138131.dkr.ecr.us-east-1.amazonaws.com
             sudo docker pull 975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest
-            sudo docker run -d 975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest
+            sudo docker run -d -p 8501:8501 975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest
   MilvusSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
