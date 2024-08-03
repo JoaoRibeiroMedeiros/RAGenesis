@@ -59,6 +59,25 @@ def query_holy_text(ec2_public_ip, query):
 
 # %%
 
+def query_many_holy_text(ec2_public_ip, query):
+   
+    # Step 1: Connect to Milvus
+    connections.connect(alias="default", host=ec2_public_ip, port="19530")
+
+    collection_name = "embeddings_collection"
+    collection = Collection(collection_name)
+
+    model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+    query_embedding = model.encode(query)
+
+    collection.load()  # Load collection
+    results = retrieve_similar(collection, query_embedding)
+    results_as_dicts = from_query_results_to_dicts(results)
+
+    return results_as_dicts
+
+# %%
+
 def main():
     
     with open('credentials/config.json', 'r') as file:
