@@ -9,19 +9,27 @@ def connect_and_query_holy_text(query):
     # Fetch the EC2 public IP
     ec2_public_ip = config['EC2_PUBLIC_IP']
     results_as_dicts = query_holy_text(ec2_public_ip, query)
-    results_as_text = [result["reference"]+ ' - '+ result["verse"] for result in results_as_dicts]
-    return results_as_text
+    # results_as_text = [result["reference"]+ ' - '+ result["verse"] for result in results_as_dicts]
+    results_references = [result["reference"] for result in results_as_dicts]
+    results_verses = [result["verse"] for result in results_as_dicts]
+    return results_references, results_verses
 
 
 st.title('Retrieval Augmented Genesis!')
 
-st.text("Describe a subject you are interested in. AI will help you find the most relevant Bible verses for it!")
+st.text("Describe a subject you are interested in.")
+        
+st.text("AI will help you find the most relevant verses for it!")
 
 query = st.sidebar.text_input('Enter Query', value = 'God is love')
 
-query_results = connect_and_query_holy_text(query)
+selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran', 'Gita'])
 
-for verse in query_results:
+results_references, results_verses = connect_and_query_holy_text(query)
+
+for reference, verse in zip(results_references, results_verses):
+    st.text("")
+    st.text(reference)
     st.text("")
     st.text(verse)
     st.text("")
