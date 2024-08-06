@@ -12,8 +12,8 @@ def exploration():
 
     #### sidebar
     selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
-    st.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
-    st.button("RAGenesis", key=None, help=None, on_click=genesis)
+    st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
+    st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
     #### 
 
     st.title('Retrieval Augmented Genesis!')
@@ -40,8 +40,8 @@ def verse_uni_verse( query_verse = "In the beginning God created the heaven and 
 
     #### sidebar
     selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
-    st.button("Explore", key=None, help=None, on_click=exploration)
-    st.button("RAGenesis", key=None, help=None, on_click=genesis)
+    st.sidebar.button("Explore", key=None, help=None, on_click=exploration)
+    st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
     #### 
 
     st.title("Verse Uni Verse")
@@ -65,8 +65,8 @@ def genesis():
 
     #### sidebar
     selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
-    st.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
-    st.button("Exploration", key=None, help=None, on_click=exploration)
+    st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
+    st.sidebar.button("Exploration", key=None, help=None, on_click=exploration)
     #### 
 
     st.title('Retrieval Augmented Genesis!')
