@@ -1,5 +1,6 @@
 
 # %%
+
 from src.embedder import encode
 from pymilvus import connections, Collection
 from sentence_transformers import SentenceTransformer
@@ -8,7 +9,7 @@ import json
 # Documents corpus (replace these with your actual documents)
 
 # Step 3: Create a function to retrieve similar data
-def retrieve_similar(collection, query_embedding, top_k=10):
+def retrieve_similar(collection, query_embedding, holy_texts, top_k=5):
     search_params = {
         "metric_type": "L2",  # Choose the similarity metric
         "params": {}
@@ -20,7 +21,8 @@ def retrieve_similar(collection, query_embedding, top_k=10):
         param=search_params,
         limit=top_k,
         expr=None,
-        output_fields=["reference","verse","embedding"]
+        output_fields=["holytext","reference","verse","embedding"]
+        partition_names=holy_texts
     )
     
     return results
@@ -31,6 +33,7 @@ def from_query_results_to_dicts(results):
     for hits in results:
         for hit in hits:
             hit_dict = {
+                "holytext": hit.entity.holytext, 
                 "reference": hit.entity.reference, 
                 "verse": hit.entity.verse, 
                 "embedding": hit.entity.embedding,                  # Access the ID of the hit
@@ -59,7 +62,7 @@ def query_holy_text(ec2_public_ip, query):
 
 # %%
 
-def query_many_holy_text(ec2_public_ip, query):
+def query_many_holy_text(ec2_public_ip, query, holy_texts):
    
     # Step 1: Connect to Milvus
     connections.connect(alias="default", host=ec2_public_ip, port="19530")
@@ -71,7 +74,7 @@ def query_many_holy_text(ec2_public_ip, query):
     query_embedding = model.encode(query)
 
     collection.load()  # Load collection
-    results = retrieve_similar(collection, query_embedding)
+    results = retrieve_similar(collection, query_embedding, holy_texts)
     results_as_dicts = from_query_results_to_dicts(results)
 
     return results_as_dicts
