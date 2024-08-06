@@ -7,6 +7,10 @@ from src.generation import *
 
 # %%
 
+local = True
+
+# %%
+
 def exploration(): 
 
     st.title('Explore Holy!')
@@ -17,16 +21,15 @@ def exploration():
 
     query = st.text_input('Enter Query', value = 'God is love')
 
-    results_references, results_verses = connect_and_query_holy_text(selected_texts, query, local=True)
+    results_references, results_verses = connect_and_query_holy_text(selected_texts, query, local=local)
 
     for reference, verse in zip(results_references, results_verses):
         st.text("")
-        st.text(reference)
+        st.button(reference, key=None, help=None, on_click=verse_uni_verse,   kwargs={"query_verse": verse})
         st.text("")
         st.text(verse)
         st.text("")
-        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=(verse), kwargs=None)
-
+        
 
 def verse_uni_verse( query_verse = "In the beginning God created the heaven and the earth."):
 
@@ -34,16 +37,15 @@ def verse_uni_verse( query_verse = "In the beginning God created the heaven and 
 
     st.text("Navigate through the verses of the selected holy texts based on semantic similarity.")
 
-    results_references, results_verses = connect_and_query_holy_text(query_verse, selected_texts, local=True)
+    results_references, results_verses = connect_and_query_holy_text(selected_texts, query_verse, local=local)
     
     for reference, verse in zip(results_references, results_verses):
         st.text("")
-        st.text(reference)
+        st.button(reference, key=None, help=None, on_click=verse_uni_verse,  kwargs={"query_verse": verse})
         st.text("")
         st.text(verse)
         st.text("")
-        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=verse, kwargs=None)
-
+        
 
 def genesis(): 
 
@@ -53,9 +55,9 @@ def genesis():
 
     st.text("Start a conversation! The oracle will respond to you based on the toggled holy texts.")
 
-    query = st.text_input('Enter Query', value = 'God is love')
+    query = st.text_input('Speak to me...')
 
-    results_references, results_verses = connect_and_query_holy_text(query, selected_texts)
+    results_references, results_verses = connect_and_query_holy_text(selected_texts, query, local=local)
 
     retrieval = join_retrieved_references(results_references, results_verses)
 
