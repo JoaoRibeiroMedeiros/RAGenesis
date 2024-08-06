@@ -79,6 +79,21 @@ def query_many_holy_text(ec2_public_ip, query, holy_texts):
 
     return results_as_dicts
 
+
+def connect_and_query_holy_text(holy_texts, query):
+
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+
+    # Fetch the EC2 public IP
+    ec2_public_ip = config['EC2_PUBLIC_IP']
+    results_as_dicts = query_many_holy_text(ec2_public_ip, query, holy_texts)
+
+    # results_as_text = [result["reference"]+ ' - '+ result["verse"] for result in results_as_dicts]
+    results_references = [result["reference"] for result in results_as_dicts]
+    results_verses = [result["verse"] for result in results_as_dicts]
+    return results_references, results_verses
+
 # %%
 
 def main():
