@@ -3,7 +3,7 @@
 
 from pymilvus import connections, utility, FieldSchema, CollectionSchema, DataType, Collection
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from src.embedder import encode
 from src.chunker import chunk_bible, chunk_quran
 import json
 
@@ -36,14 +36,11 @@ quran_verses_references = [verse[0] for verse in quran_verses]
 
 # %% 
 
-# Load SentenceTransformer model
-model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-
 #TODO API driven embedding
 # Generate embeddings
 
-bible_embeddings = model.encode(bible_verses_text)
-quran_embeddings = model.encode(quran_verses_text)
+bible_embeddings = encode(bible_verses_text)
+quran_embeddings = encode(quran_verses_text)
 
  
 # %% 
@@ -124,4 +121,16 @@ collection.load()
 # Check insertion
 print(f"Number of entities in Milvus: {collection.num_entities}")
 
+# %%
+
+### health check
+
+# Connect to Milvus
+connections.connect("default", host="localhost", port="19530")
+
+# Check if the connection is successful
+if connections.has_connection("default"):
+    print("Milvus is healthy!")
+else:
+    print("Milvus is not healthy.")
 # %%

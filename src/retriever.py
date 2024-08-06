@@ -3,7 +3,6 @@
 
 from src.embedder import encode
 from pymilvus import connections, Collection
-from sentence_transformers import SentenceTransformer
 import numpy as np
 import json
 # Documents corpus (replace these with your actual documents)
@@ -51,8 +50,7 @@ def query_holy_text(ec2_public_ip, query):
     collection_name = "embeddings_collection"
     collection = Collection(collection_name)
 
-    model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-    query_embedding = model.encode(query)
+    query_embedding = encode(query)
 
     collection.load()  # Load collection
     results = retrieve_similar(collection, query_embedding)
@@ -70,8 +68,7 @@ def query_many_holy_text(ec2_public_ip, query, holy_texts):
     collection_name = "embeddings_collection"
     collection = Collection(collection_name)
 
-    model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-    query_embedding = model.encode(query)
+    query_embedding = encode(query)
 
     collection.load()  # Load collection
     results = retrieve_similar(collection, query_embedding, holy_texts)
@@ -91,9 +88,10 @@ def connect_and_query_holy_text(holy_texts, query, local=False):
             ec2_public_ip = config['EC2_PUBLIC_IP']
 
     results_as_dicts = query_many_holy_text(ec2_public_ip, query, holy_texts)
+    results_sources = [result["holytext"] for result in results_as_dicts]
     results_references = [result["reference"] for result in results_as_dicts]
     results_verses = [result["verse"] for result in results_as_dicts]
-    return results_references, results_verses
+    return results_sources, results_references, results_verses
 
 
 def join_retrieved_references(results_references, results_verses):

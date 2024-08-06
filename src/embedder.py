@@ -5,7 +5,7 @@ from botocore.exceptions import ClientError
 import json
 
 
-def get_cohere_embedding(corpus):
+def encode(corpus):
     # Create a Bedrock Runtime client in the AWS Region you want to use.
     client = boto3.client("bedrock-runtime", region_name="us-east-1")
 
