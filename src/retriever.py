@@ -94,6 +94,13 @@ def connect_and_query_holy_text(holy_texts, query):
     results_verses = [result["verse"] for result in results_as_dicts]
     return results_references, results_verses
 
+
+def join_retrieved_references(results_references, results_verses):
+    consolidated_retrieval = ""
+    for reference, verse in zip(results_references, results_verses):
+        consolidated_retrieval = consolidated_retrieval + reference + '\n' + verse + '\n\n'
+    return consolidated_retrieval    
+
 # %%
 
 def main():
@@ -110,7 +117,7 @@ def main():
         print(result["reference"], result["verse"])
     
     
-    
+
 
 if __name__ == "__main__":
     main()
