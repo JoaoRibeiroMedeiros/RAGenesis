@@ -2,38 +2,74 @@
 import streamlit as st
 from src.retriever import *
 
-def connect_and_query_holy_text(query):
+import requests
+import json
+
+def connect_and_query_holy_text(holy_texts, query):
 
     with open('config.json', 'r') as file:
         config = json.load(file)
+
     # Fetch the EC2 public IP
     ec2_public_ip = config['EC2_PUBLIC_IP']
-    results_as_dicts = query_holy_text(ec2_public_ip, query)
+    results_as_dicts = query_many_holy_text(ec2_public_ip, query, holy_texts)
+
     # results_as_text = [result["reference"]+ ' - '+ result["verse"] for result in results_as_dicts]
     results_references = [result["reference"] for result in results_as_dicts]
     results_verses = [result["verse"] for result in results_as_dicts]
     return results_references, results_verses
 
+def verse_uni_verse( query_verse = "In the beginning God created the heaven and the earth."):
 
-st.title('Retrieval Augmented Genesis!')
+    st.title("Verse Uni Verse")
 
-st.text("Describe a subject you are interested in.")
-        
-st.text("AI will help you find the most relevant verses for it!")
+    st.text("Describe a subject you are interested in.")
 
-query = st.sidebar.text_input('Enter Query', value = 'God is love')
+    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran', 'Gita'])
 
-selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran', 'Gita'])
+    results_references, results_verses = connect_and_query_holy_text(query_verse, selected_texts) \
+    
+    for reference, verse in zip(results_references, results_verses):
+        st.text("")
+        st.text(reference)
+        st.text("")
+        st.text(verse)
+        st.text("")
+        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=(verse), kwargs=None)
 
-results_references, results_verses = connect_and_query_holy_text(query)
 
-for reference, verse in zip(results_references, results_verses):
-    st.text("")
-    st.text(reference)
-    st.text("")
-    st.text(verse)
-    st.text("")
+def exploration(): 
 
+    st.title('Retrieval Augmented Genesis!')
+
+    st.text("Describe a subject or an idea you are interested in.")
+
+    st.text("AI will help you find the most relevant verses in the selected holy texts for it!")
+
+    query = st.sidebar.text_input('Enter Query', value = 'God is love')
+
+    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran', 'Gita'])
+
+    results_references, results_verses = connect_and_query_holy_text(query, selected_texts)
+
+    for reference, verse in zip(results_references, results_verses):
+        st.text("")
+        st.text(reference)
+        st.text("")
+        st.text(verse)
+        st.text("")
+        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=(verse), kwargs=None)
+
+
+def genesis(): 
+
+    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran', 'Gita'])
+
+    st.title('Retrieval Augmented Genesis!')
+
+    st.text("Speak to the oracle!")
+
+    st.text("Start a conversation! The oracle will respond to you based on the toggled holy texts.")
 
 
 
