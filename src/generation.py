@@ -1,7 +1,5 @@
 # %%
 
-import requests
-import json
 import boto3
 from botocore.exceptions import ClientError
 
@@ -44,7 +42,7 @@ def get_oracle_response(user_query):
 
 
 
-# # %%
+# %%
 
 # response = get_oracle_response('God is love')
 
