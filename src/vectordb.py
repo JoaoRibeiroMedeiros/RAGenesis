@@ -34,17 +34,19 @@ bible_verses_references = [verse[0] for verse in bible_verses]
 quran_verses_text = [verse[1] for verse in quran_verses]
 quran_verses_references = [verse[0] for verse in quran_verses]
 
-# %%   
+# %% 
 
 # Load SentenceTransformer model
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 
+#TODO API driven embedding
 # Generate embeddings
 
 bible_embeddings = model.encode(bible_verses_text)
 quran_embeddings = model.encode(quran_verses_text)
 
-# %%
+ 
+# %% 
 
 # Connect to Milvus
 connections.connect(alias="default", host=host, port="19530")
@@ -53,7 +55,7 @@ connections.connect(alias="default", host=host, port="19530")
 # Define fields and schema for your collection
 fields = [
     FieldSchema(name="id", dtype=DataType.INT64, is_primary=True, auto_id=True),
-    FieldSchema(name="holy-text", dtype=DataType.VARCHAR, max_length=40),
+    FieldSchema(name="holytext", dtype=DataType.VARCHAR, max_length=40),
     FieldSchema(name="reference", dtype=DataType.VARCHAR, max_length=100),
     FieldSchema(name="verse", dtype=DataType.VARCHAR, max_length=max([len(verse) for verse in bible_verses_text + quran_verses_text])+5),
     FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=len(bible_embeddings[0]))
@@ -74,6 +76,12 @@ if utility.has_collection(collection_name):
 # Create the collection with the new schema
 collection = Collection(name=collection_name, schema=schema)
 
+holy_texts = ['Bible', 'Quran']
+
+for partition_name in holy_texts:
+    if not collection.has_partition(partition_name):
+        collection.create_partition(partition_name)
+
 # %%
 
 # Insert data
@@ -86,7 +94,7 @@ bible_data = [
 ]
 
 quran_data = [
-    len(bible_verses_references) * ['Quran'],
+    len(quran_verses_references) * ['Quran'],
     quran_verses_references,  # List of references
     quran_verses_text,        # List of verses
     [x for x in quran_embeddings]          # List of embeddings
@@ -94,9 +102,9 @@ quran_data = [
 
 # %%
 
-collection.insert(bible_data)
+collection.insert(bible_data,partition_name='Bible')
 
-collection.insert(quran_data)
+collection.insert(quran_data,partition_name='Quran')
 
 # %%
 
