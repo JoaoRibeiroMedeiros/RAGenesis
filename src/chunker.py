@@ -22,7 +22,6 @@ def chunk_quran(file_path):
     with open(file_path, 'r') as file:
         for line in file:
             # Split the line at the first tab to separate the reference and the text
-            print(line)
             reference1, text = line.split("|", 1)
             reference2, text = text.split("|", 1)
             verses.append(('Surate '+ reference1+ ' verse ' + reference2, text.strip()))
