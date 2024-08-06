@@ -15,7 +15,7 @@ def exploration():
 
     st.text("AI will help you find the most relevant verses in the selected holy texts for it!")
 
-    query = st.sidebar.text_input('Enter Query', value = 'God is love')
+    query = st.text_input('Enter Query', value = 'God is love')
 
     results_references, results_verses = connect_and_query_holy_text(selected_texts, query, local=True)
 
@@ -31,9 +31,8 @@ def exploration():
 def verse_uni_verse( query_verse = "In the beginning God created the heaven and the earth."):
 
     st.title("Verse Uni Verse")
-    st.text("Navigate through the verses of the selected holy texts based on semantic similarity.")
 
-    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
+    st.text("Navigate through the verses of the selected holy texts based on semantic similarity.")
 
     results_references, results_verses = connect_and_query_holy_text(query_verse, selected_texts, local=True)
     
@@ -43,7 +42,7 @@ def verse_uni_verse( query_verse = "In the beginning God created the heaven and 
         st.text("")
         st.text(verse)
         st.text("")
-        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=(verse), kwargs=None)
+        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=verse, kwargs=None)
 
 
 def genesis(): 
