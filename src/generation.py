@@ -1,14 +1,43 @@
-from transformers import AutoTokenizer, AutoModel, GPT2Tokenizer, GPT2LMHeadModel
+import requests
+import json
+import boto3
+from botocore.exceptions import ClientError
 
 
-def generate_response(query, retrieved_docs):
+def get_oracle_response(user_query):
+    # Create a Bedrock Runtime client in the AWS Region you want to use.
+    client = boto3.client("bedrock-runtime", region_name="us-east-1")
 
-    gpt2_tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-    gpt2_model = GPT2LMHeadModel.from_pretrained("gpt2")
-    context = " ".join(retrieved_docs) + " " + query
-    inputs = gpt2_tokenizer.encode(context, return_tensors="pt")
-    outputs = gpt2_model.generate(inputs, max_length=100, num_return_sequences=1)
-    response = gpt2_tokenizer.decode(outputs[0], skip_special_tokens=True)
+    # Set the model ID
+    model_id = "meta.llama3-70b-instruct-v1:0"
 
-    return response
+    # Start a conversation with the user message.
+    instruction = """[INST]You are an oracle, whose purpose is to using the convergence between the different texts you are delivered in combination with the user expressed interest [/INST]"""
+
+    user_message = instruction + user_query
+
+    conversation = [
+        {
+            "role": "user",
+            "content": [{"text": user_message}],
+        }
+    ]
+    try:
+        # Send the message to the model, using a basic inference configuration.
+        response = client.converse(
+            modelId=model_id,
+            messages=conversation,
+            inferenceConfig={"maxTokens":512,"temperature":0.5,"topP":0.9},
+            additionalModelRequestFields={}
+        )
+        # Extract and print the response text.
+        response_text = response["output"]["message"]["content"][0]["text"]
+        return(response_text)
+
+    except (ClientError, Exception) as e:
+        print(f"ERROR: Can't invoke '{model_id}'. Reason: {e}")
+        exit(1)
+
+
+
 
