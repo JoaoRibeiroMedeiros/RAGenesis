@@ -3,9 +3,6 @@ import streamlit as st
 from src.retriever import *
 from src.generation import *
 
-import requests
-import json
-
 def verse_uni_verse( query_verse = "In the beginning God created the heaven and the earth."):
 
     st.title("Verse Uni Verse")
