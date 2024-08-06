@@ -21,7 +21,7 @@ def retrieve_similar(collection, query_embedding, holy_texts, top_k=5):
         param=search_params,
         limit=top_k,
         expr=None,
-        output_fields=["holytext","reference","verse","embedding"]
+        output_fields=["holytext","reference","verse","embedding"],
         partition_names=holy_texts
     )
     
