@@ -1,30 +1,20 @@
 
+# %%
+
 import streamlit as st
 from src.retriever import *
 from src.generation import *
 
-def verse_uni_verse( query_verse = "In the beginning God created the heaven and the earth."):
 
-    st.title("Verse Uni Verse")
-
-    st.text("Describe a subject you are interested in.")
-
-    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran', 'Gita'])
-
-    results_references, results_verses = connect_and_query_holy_text(query_verse, selected_texts) \
-    
-    for reference, verse in zip(results_references, results_verses):
-        st.text("")
-        st.text(reference)
-        st.text("")
-        st.text(verse)
-        st.text("")
-        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=(verse), kwargs=None)
-
+# %%
 
 def exploration(): 
 
+    #### sidebar
     selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
+    st.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
+    st.button("RAGenesis", key=None, help=None, on_click=genesis)
+    #### 
 
     st.title('Retrieval Augmented Genesis!')
 
@@ -45,9 +35,39 @@ def exploration():
         st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=(verse), kwargs=None)
 
 
+
+def verse_uni_verse( query_verse = "In the beginning God created the heaven and the earth."):
+
+    #### sidebar
+    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
+    st.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
+    st.button("Explore", key=None, help=None, on_click=exploration)
+    #### 
+
+    st.title("Verse Uni Verse")
+    st.text("Navigate through the verses of the selected holy texts based on semantic similarity.")
+
+    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
+
+    results_references, results_verses = connect_and_query_holy_text(query_verse, selected_texts) \
+    
+    for reference, verse in zip(results_references, results_verses):
+        st.text("")
+        st.text(reference)
+        st.text("")
+        st.text(verse)
+        st.text("")
+        st.button(reference, key=None, help=None, on_click=verse_uni_verse, args=(verse), kwargs=None)
+
+
+
 def genesis(): 
 
-    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran', 'Gita'])
+    #### sidebar
+    selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'])
+    st.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
+    st.button("RAGenesis", key=None, help=None, on_click=genesis)
+    #### 
 
     st.title('Retrieval Augmented Genesis!')
 
@@ -66,6 +86,7 @@ def genesis():
     st.text(response)
 
 
+exploration()
 
 
 # # Define a function to get user input.
