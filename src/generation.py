@@ -1,3 +1,5 @@
+# %%
+
 import requests
 import json
 import boto3
@@ -12,7 +14,7 @@ def get_oracle_response(user_query):
     model_id = "meta.llama3-70b-instruct-v1:0"
 
     # Start a conversation with the user message.
-    instruction = """[INST]You are an oracle, whose purpose is to using the convergence between the different texts you are delivered in combination with the user expressed interest [/INST]"""
+    instruction = """[INST]You are an oracle[/INST]"""
 
     user_message = instruction + user_query
 
@@ -32,6 +34,7 @@ def get_oracle_response(user_query):
         )
         # Extract and print the response text.
         response_text = response["output"]["message"]["content"][0]["text"]
+
         return(response_text)
 
     except (ClientError, Exception) as e:
@@ -41,3 +44,12 @@ def get_oracle_response(user_query):
 
 
 
+# # %%
+
+# response = get_oracle_response('God is love')
+
+# # %%
+
+# print(response)
+
+# # %%

@@ -55,7 +55,7 @@ def genesis():
 
     st.text("Start a conversation! The oracle will respond to you based on the toggled holy texts.")
 
-    query = st.text_input('Speak to me...')
+    query = st.text_input('Speak to me...', value = 'God is love')
 
     results_references, results_verses = connect_and_query_holy_text(selected_texts, query, local=local)
 
