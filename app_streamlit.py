@@ -8,6 +8,8 @@ from src.embedder import encode
 
 # %%
 
+holy_texts = ['Bible', 'Quran', 'Gita', 'Analects']
+
 local = True
 
 # %%
@@ -24,9 +26,9 @@ def landing_page():
 
     st.text("There are three main features:")
 
-    st.text("You can explore the texts,") 
+    st.text("You can explore the texts") 
             
-    st.text("navigate through the verses,") 
+    st.text("Navigate through the verses, clicking on verse to find the most semantically similar verses in the selected holy texts.") 
             
     st.text("and even have a conversation with the oracle!")
 
@@ -88,12 +90,14 @@ def genesis():
 
     st.text(response)
 
-
 #### sidebar
-selected_texts = st.sidebar.multiselect('Select Holy Texts', ['Bible', 'Quran'], default=['Bible', 'Quran'])
+
+selected_texts = st.sidebar.multiselect('Select Holy Texts', holy_texts, default=holy_texts)
+
 st.sidebar.button("Exploration", key=None, help=None, on_click=exploration)
 st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
 st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
+
 #### 
 
 exploration()
