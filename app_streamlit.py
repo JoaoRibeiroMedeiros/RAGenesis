@@ -94,9 +94,24 @@ def genesis():
 
 selected_texts = st.sidebar.multiselect('Select Holy Texts', holy_texts, default=holy_texts)
 
-st.sidebar.button("Exploration", key=None, help=None, on_click=exploration)
-st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
-st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
+# st.sidebar.button("Exploration", key=None, help=None, on_click=exploration)
+# st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
+# st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
+
+if st.sidebar.button("Exploration"):
+    st.session_state.page = 'Exploration'
+if st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse):
+    st.session_state.page = 'VerseUniVerse'
+if st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)):
+    st.session_state.page = 'RAGenesis'
+
+# Main page logic
+if st.session_state.page == 'Exploration':
+    exploration()
+elif st.session_state.page == 'VerseUniVerse':
+    verse_uni_verse()
+elif st.session_state.page == 'RAGenesis':
+    genesis()
 
 #### 
 
