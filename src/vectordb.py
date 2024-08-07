@@ -4,7 +4,7 @@
 from pymilvus import connections, utility, FieldSchema, CollectionSchema, DataType, Collection
 import numpy as np
 from src.embedder import encode
-from src.chunker import chunk_bible, chunk_quran
+from src.chunker import chunk_bible, chunk_quran, chunk_gita, chunk_analects ,analects
 import json
 
 # %%
@@ -24,25 +24,28 @@ else:
 
 
 # Documents corpus (replace these with your actual documents)
-bible_verses = chunk_bible('sacred_data/bible.txt')
-quran_verses = chunk_quran('sacred_data/quran.txt')
+
+bible_references, bible_verses = chunk_bible('sacred_data/bible.txt')
+quran_references, quran_verses = chunk_quran('sacred_data/quran.txt')
+gita_references, gita_verses = chunk_gita('sacred_data/gita.txt')
+analects_references, analects_verses = chunk_analects(analects)
 
 # Extracting just the text portions and references from each tuple
-bible_verses_text = [verse[1] for verse in bible_verses]
-bible_verses_references = [verse[0] for verse in bible_verses]
 
-quran_verses_text = [verse[1] for verse in quran_verses]
-quran_verses_references = [verse[0] for verse in quran_verses]
+# %% 
+
+print( len(bible_references), len(quran_references), len(gita_references), len(analects_references) )
 
 # %% 
 
 #TODO API driven embedding
 # Generate embeddings
 
-bible_embeddings = encode(bible_verses_text)
-quran_embeddings = encode(quran_verses_text)
+bible_embeddings = encode(bible_verses)
+quran_embeddings = encode(quran_verses)
+gita_embeddings = encode(gita_verses)
+analects_embeddings = encode(analects_verses)
 
- 
 # %% 
 
 # Connect to Milvus
@@ -54,7 +57,7 @@ fields = [
     FieldSchema(name="id", dtype=DataType.INT64, is_primary=True, auto_id=True),
     FieldSchema(name="holytext", dtype=DataType.VARCHAR, max_length=40),
     FieldSchema(name="reference", dtype=DataType.VARCHAR, max_length=100),
-    FieldSchema(name="verse", dtype=DataType.VARCHAR, max_length=max([len(verse) for verse in bible_verses_text + quran_verses_text])+5),
+    FieldSchema(name="verse", dtype=DataType.VARCHAR, max_length=max([len(verse) for verse in bible_verses + quran_verses + gita_verses + analects_verses])+5),
     FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=len(bible_embeddings[0]))
 ]
 
@@ -73,7 +76,7 @@ if utility.has_collection(collection_name):
 # Create the collection with the new schema
 collection = Collection(name=collection_name, schema=schema)
 
-holy_texts = ['Bible', 'Quran']
+holy_texts = ['Bible', 'Quran', 'Gita', 'Analects']
 
 for partition_name in holy_texts:
     if not collection.has_partition(partition_name):
@@ -81,27 +84,48 @@ for partition_name in holy_texts:
 
 # %%
 
-# Insert data
+# make data
 
 bible_data = [
-    len(bible_verses_references) * ['Bible'],
-    bible_verses_references,  # List of references
-    bible_verses_text,        # List of verses
+    len(bible_references) * ['Bible'],
+    bible_references,  # List of references
+    bible_verses,        # List of verses
     [x for x in bible_embeddings]          # List of embeddings
 ]
 
 quran_data = [
-    len(quran_verses_references) * ['Quran'],
-    quran_verses_references,  # List of references
-    quran_verses_text,        # List of verses
+    len(quran_references) * ['Quran'],
+    quran_references,  # List of references
+    quran_verses,        # List of verses
     [x for x in quran_embeddings]          # List of embeddings
 ]
 
+gita_data = [
+    len(gita_references) * ['Gita'],
+    gita_references,  # List of references
+    gita_verses,        # List of verses
+    [x for x in gita_embeddings]          # List of embeddings
+]
+
+analects_data = [
+    len(analects_references) * ['Analects'],
+    analects_references,  # List of references
+    analects_verses,        # List of verses
+    [x for x in analects_embeddings]          # List of embeddings
+]
+
+
 # %%
+
+# insert data
 
 collection.insert(bible_data,partition_name='Bible')
 
 collection.insert(quran_data,partition_name='Quran')
+
+collection.insert(gita_data,partition_name='Gita')
+
+collection.insert(analects_data,partition_name='Analects')
 
 # %%
 
@@ -121,6 +145,7 @@ collection.load()
 # Check insertion
 print(f"Number of entities in Milvus: {collection.num_entities}")
 
+print(collection.partitions)
 # %%
 
 ### health check
