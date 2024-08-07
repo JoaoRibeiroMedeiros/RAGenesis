@@ -28,7 +28,37 @@ def chunk_quran(file_path):
     return verses
 
 
+# %%
+
+def add_analect_chapter_name(reference):
+    analects_chapters = {"1":"Xue er 學而",
+                        "2":"Wei zheng 爲政",
+                        "3":"Ba yi 八佾",
+                        "4":"Li ren 里仁",
+                        "5":"Gongye Chang 公冶長",
+                        "6":"Yong ye 雍也",
+                        "7":"Shu er 述而",
+                        "8":"Tai Bo 泰伯",
+                        "9":"Zi nan 子罕",
+                        "10":"Xiang dang 鄕黨",
+                        "11":"Xianjin 先進",
+                        "12":"Yan Yuan 顏淵",
+                        "13":"Zi Lu 子路",
+                        "14":"Xian wen 憲問",
+                        "15":"Wei Ling Gong 衞靈公",
+                        "16":"Ji shi 季氏",
+                        "17":"Yang Huo 陽貨",
+                        "18":"Weizi 微子",
+                        "19":"Zi Zhang 子張",
+                        "20":"Yao yue 堯曰"}
+    reference_ = reference
+    chapter = reference_.split('[')[1].split(':')[0]
+    chapter_name = analects_chapters[chapter] 
+    reference_ = chapter_name + ' ' + reference_
+    return reference_
+
 def chunk_analects(input_string):
+    
     # Split the input string into lines
     lines = input_string.split('\n')
     
@@ -47,19 +77,19 @@ def chunk_analects(input_string):
             elif line[0] == '[' and line[3] == '-' and line[6] == ']':
                 continue  # Skip lines matching [n-m]
             elif line[0] == '[' and line[2] == ':' and line[4] == ']':
-                reference = line[:5]
+                reference = add_analect_chapter_name(line[:5])
                 references.append(reference)
                 verses.append(line[5:])  # Collect lines starting with n.
             elif line[0] == '[' and line[3] == ':' and line[5] == ']':
-                reference = line[:6]
+                reference = add_analect_chapter_name(line[:6])
                 references.append(reference)
                 verses.append(line[6:])  # Collect lines starting with n.
             elif line[0] == '[' and line[2] == ':' and line[5] == ']':
-                reference = line[:6]
+                reference = add_analect_chapter_name(line[:6])
                 references.append(reference)
                 verses.append(line[6:])  # Collect lines starting with n.
             elif line[0] == '[' and line[3] == ':' and line[6] == ']':
-                reference = line[:7]
+                reference = add_analect_chapter_name(line[:7])
                 references.append(reference)
                 verses.append(line[7:])  # Collect lines starting with n.
             elif line[0:9] == '[Comment]':
@@ -73,12 +103,22 @@ def chunk_analects(input_string):
                 verses.append(line)  # Collect other lines
         else :
            continue
-
     
     return references, verses
 
+# %% 
 
-# references, verses = chunk_analects(analects[:-1])
+references, verses = chunk_analects(analects[:-1])
+
+# %% 
+references
+
+
+# %%
+references[100]
+# %%
+
+references[100].split('[')[1].split(':')[0]
 
 # %% 
 
