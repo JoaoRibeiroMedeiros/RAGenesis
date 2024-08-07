@@ -98,6 +98,12 @@ selected_texts = st.sidebar.multiselect('Select Holy Texts', holy_texts, default
 # st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse)
 # st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
 
+
+landing_page()
+
+st.session_state.page = 'Landing'
+
+
 if st.sidebar.button("Exploration"):
     st.session_state.page = 'Exploration'
 if st.sidebar.button("VerseUniVerse"):
@@ -115,5 +121,5 @@ elif st.session_state.page == 'RAGenesis':
 
 #### 
 
-landing_page()
+
 
