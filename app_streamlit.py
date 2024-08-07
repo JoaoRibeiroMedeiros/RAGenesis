@@ -100,9 +100,9 @@ selected_texts = st.sidebar.multiselect('Select Holy Texts', holy_texts, default
 
 if st.sidebar.button("Exploration"):
     st.session_state.page = 'Exploration'
-if st.sidebar.button("VerseUniVerse", key=None, help=None, on_click=verse_uni_verse):
+if st.sidebar.button("VerseUniVerse"):
     st.session_state.page = 'VerseUniVerse'
-if st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)):
+if st.sidebar.button("RAGenesis"):
     st.session_state.page = 'RAGenesis'
 
 # Main page logic
