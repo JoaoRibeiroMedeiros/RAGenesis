@@ -30,6 +30,40 @@ def chunk_quran(file_path):
 
 # %%
 
+
+def chunk_gita(file_path):
+    verses = []
+    references = []
+    in_translation_section = False
+    with open(file_path, 'r') as file:
+        for line in file:
+            # Split the line at the first tab to separate the reference and the text
+            if "- CHAPTER" in line:
+                matches = re.findall(r'- CHAPTER (\d+)', line)
+                print(matches)
+                reference_chapter = matches[0]
+                reference_verse_number = 0
+
+            if "TRANSLATION" in line:
+                verse = ""
+                reference_verse_number = reference_verse_number + 1
+                in_translation_section = True
+                continue  
+
+            # Check if the current line contains "PURPORT"
+            if "PURPORT" in line:
+                references.append(  "Chapter " + str(reference_chapter) + " Verse " + str(reference_verse_number) )
+                verses.append(verse.replace("\n", " "))
+                in_translation_section = False
+                continue  
+            
+            if in_translation_section:  
+                verse = verse + line 
+            
+    return references, verses
+
+
+
 def add_analect_chapter_name(reference):
     analects_chapters = {"1":"Xue er 學而",
                         "2":"Wei zheng 爲政",
@@ -56,6 +90,7 @@ def add_analect_chapter_name(reference):
     chapter_name = analects_chapters[chapter] 
     reference_ = chapter_name + ' ' + reference_
     return reference_
+
 
 def chunk_analects(input_string):
     
