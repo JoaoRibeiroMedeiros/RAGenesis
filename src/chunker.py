@@ -47,7 +47,7 @@ def chunk_gita(file_path):
             # Split the line at the first tab to separate the reference and the text
             if "- CHAPTER" in line:
                 matches = re.findall(r'- CHAPTER (\d+)', line)
-                print(matches)
+                # print(matches)
                 reference_chapter = matches[0]
                 reference_verse_number = 0
 
@@ -148,6 +148,12 @@ def chunk_analects(input_string):
     
     return references, verses
 
+
+
+# %% 
+
+
+# references, verses = chunk_analects(analects)
 
 # %% 
 
