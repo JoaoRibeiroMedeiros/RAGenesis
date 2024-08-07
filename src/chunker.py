@@ -1,3 +1,4 @@
+import re
 
 # %%
 
@@ -12,7 +13,11 @@ def chunk_bible(file_path):
                 reference, text = line.split("\t", 1)
                 verses.append((reference.strip(), text.strip()))
             i+=1
-    return verses
+
+    bible_verses = [verse[1] for verse in verses]
+    bible_verses_references = [verse[0] for verse in verses]
+    return bible_verses_references, bible_verses
+
 
 # %%
 
@@ -25,7 +30,9 @@ def chunk_quran(file_path):
             reference1, text = line.split("|", 1)
             reference2, text = text.split("|", 1)
             verses.append(('Surate '+ reference1+ ' verse ' + reference2, text.strip()))
-    return verses
+    quran_verses = [verse[1] for verse in verses]
+    quran_verses_references = [verse[0] for verse in verses]
+    return quran_verses_references, quran_verses
 
 
 # %%
@@ -141,19 +148,6 @@ def chunk_analects(input_string):
     
     return references, verses
 
-# %% 
-
-references, verses = chunk_analects(analects[:-1])
-
-# %% 
-references
-
-
-# %%
-references[100]
-# %%
-
-references[100].split('[')[1].split(':')[0]
 
 # %% 
 
