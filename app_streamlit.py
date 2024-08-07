@@ -48,9 +48,9 @@ def exploration():
 
     results_sources, results_references, results_verses = connect_and_query_holy_text(selected_texts, query, local=local)
 
-    for source, reference, verse in zip(results_sources,results_references, results_verses):
-        st.text("")
-        st.button(reference, key=None, help=None, on_click=verse_uni_verse,   kwargs={"query_verse": verse})
+    for i, source, reference, verse in zip(range(len(results_verses)) ,results_sources,results_references, results_verses):
+        st.text(source)
+        st.button(reference, key=i, help=None, on_click=verse_uni_verse,   kwargs={"query_verse": verse})
         st.text("")
         st.text(verse)
         st.text("")
@@ -64,9 +64,9 @@ def verse_uni_verse( query_verse = "In the beginning God created the heaven and 
 
     results_sources, results_references, results_verses = connect_and_query_holy_text(selected_texts, query_verse, local=local)
     
-    for source, reference, verse in zip(results_sources,results_references, results_verses):
-        st.text("")
-        st.button(reference, key=None, help=None, on_click=verse_uni_verse,  kwargs={"query_verse": verse})
+    for i, source, reference, verse in zip(range(len(results_verses)), results_sources,results_references, results_verses):
+        st.text(source)
+        st.button(reference, key=i, help=None, on_click=verse_uni_verse,  kwargs={"query_verse": verse})
         st.text("")
         st.text(verse)
         st.text("")
@@ -100,5 +100,5 @@ st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
 
 #### 
 
-exploration()
+landing_page()
 
