@@ -16,25 +16,28 @@ local = True
 
 def landing_page(): 
 
-    st.title('Holy AI!')
+    import streamlit as st
 
-    st.text("Welcome to Holy AI!")
+st.title('Holy AI!')
 
-    st.text("Explore the holy texts of the Bible, the Quran, the Bhagavad Gita and the Analects with the help of AI!")
+st.markdown("""
+Welcome to **Holy AI!**
 
-    st.text("Select the holy texts you want to explore and start your journey!")
+Explore the holy texts of the **Bible**, the **Quran**, the **Bhagavad Gita**, and the **Analects** with the help of AI!
 
-    st.text("There are three main features:")
+Select the holy texts you want to explore and start your journey!
 
-    st.text("You can explore the texts") 
-            
-    st.text("Navigate through the verses, clicking on verse to find the most semantically similar verses in the selected holy texts.") 
-            
-    st.text("and even have a conversation with the oracle!")
+There are three main features:
 
-    st.text("The oracle will respond to you based on the toggled holy texts.")
+- **Explore the texts**
+- **Navigate through the verses**: Click on a verse to find the most semantically similar verses in the selected holy texts.
+- **Have a conversation with the oracle!**
 
-    st.text("Enjoy your journey!")
+The oracle will respond to you based on the toggled holy texts.
+
+**Enjoy your journey!**
+""")
+
 
 def exploration(): 
 
@@ -99,11 +102,6 @@ selected_texts = st.sidebar.multiselect('Select Holy Texts', holy_texts, default
 # st.sidebar.button("RAGenesis", key=None, help=None, on_click=genesis)
 
 
-landing_page()
-
-st.session_state.page = 'Landing'
-
-
 if st.sidebar.button("Exploration"):
     st.session_state.page = 'Exploration'
 if st.sidebar.button("VerseUniVerse"):
@@ -112,7 +110,13 @@ if st.sidebar.button("RAGenesis"):
     st.session_state.page = 'RAGenesis'
 
 # Main page logic
-if st.session_state.page == 'Exploration':
+
+st.session_state.page = 'Landing'
+
+
+if st.session_state.page == 'Landing':
+    landing_page()
+elif st.session_state.page == 'Exploration':
     exploration()
 elif st.session_state.page == 'VerseUniVerse':
     verse_uni_verse()
