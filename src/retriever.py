@@ -79,8 +79,10 @@ def query_many_holy_text(ec2_public_ip, query, holy_texts):
 
 def connect_and_query_holy_text(holy_texts, query, local=False):
 
-    if local:
+    if local=='localdocker':
         ec2_public_ip = "host.docker.internal"
+    elif local=='local':
+        ec2_public_ip = "localhost"
     else:
         # Fetch the EC2 public IP
         with open('config.json', 'r') as file:
