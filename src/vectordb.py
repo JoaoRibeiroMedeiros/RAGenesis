@@ -9,7 +9,7 @@ import json
 
 # %%
 
-local= True
+local= False
 
 if local == True:
 
@@ -151,7 +151,7 @@ print(collection.partitions)
 ### health check
 
 # Connect to Milvus
-connections.connect("default", host="localhost", port="19530")
+connections.connect("default", host=host, port="19530")
 
 # Check if the connection is successful
 if connections.has_connection("default"):
