@@ -9,3 +9,5 @@ cf-template/vectordb/.aws-sam
 teste.py
 src/vectordb_ref.py
 flagged
+requirements_gr.txt
+app_gradio.py
