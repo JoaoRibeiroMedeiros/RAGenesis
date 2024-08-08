@@ -4,7 +4,6 @@
 import streamlit as st
 from src.retriever import *
 from src.generation import *
-from src.embedder import encode
 
 # %%
 
@@ -14,7 +13,7 @@ holy_texts = ['Bible', 'Quran', 'Gita', 'Analects']
 
 st.session_state.query = "God is love"
 
-local = True
+local = 'localdocker'
 
 # %%
 
