@@ -13,7 +13,9 @@ holy_texts = ['Bible', 'Quran', 'Gita', 'Analects']
 
 st.session_state.query = "God is love"
 
-local = 'localdocker'
+# local = 'localdocker'
+
+local = False
 
 # %%
 
