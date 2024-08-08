@@ -8,9 +8,11 @@ from src.embedder import encode
 
 # %%
 
+st.session_state.counter = 0
+
 holy_texts = ['Bible', 'Quran', 'Gita', 'Analects']
 
-query = "God is love"
+st.session_state.query = "God is love"
 
 local = True
 
@@ -50,7 +52,7 @@ def exploration():
 
     st.markdown("AI will help you find the most relevant verses in the selected holy texts for it!")
 
-    query = st.text_input('Enter Query', value= query, on_change=exploration)
+    query = st.text_input('Enter Query', value= st.session_state.query , on_change=exploration)
 
     st.session_state.query = query
 
@@ -58,9 +60,10 @@ def exploration():
 
     results_sources, results_references, results_verses = connect_and_query_holy_text(selected_texts, st.session_state.query, local=local)
 
-    for i, source, reference, verse in zip(range(len(results_verses)) ,results_sources,results_references, results_verses):
+    for source, reference, verse in zip(results_sources,results_references, results_verses):
+        st.session_state.counter += 1
         st.markdown(source)
-        st.button(reference, key=i, help=None, on_click=verse_uni_verse,   kwargs={"query_verse": verse})
+        st.button(reference, key=st.session_state.counter, help=None, on_click=verse_uni_verse,   kwargs={"query_verse": verse})
         st.markdown("")
         st.markdown(verse)
         st.markdown("")
@@ -75,9 +78,10 @@ def verse_uni_verse( query_verse = "In the beginning God created the heaven and 
     results_sources, results_references, results_verses = connect_and_query_holy_text(selected_texts, query_verse, local=local)
 
     
-    for i, source, reference, verse in zip(range(len(results_verses)), results_sources,results_references, results_verses):
+    for source, reference, verse in zip( results_sources,results_references, results_verses):
+        st.session_state.counter += 1
         st.markdown(source)
-        st.button(reference, key=i, help=None, on_click=verse_uni_verse,  kwargs={"query_verse": verse})
+        st.button(reference, key=st.session_state.counter, help=None, on_click=verse_uni_verse,  kwargs={"query_verse": verse})
         st.markdown("")
         st.markdown(verse)
         st.markdown("")
@@ -91,9 +95,9 @@ def genesis():
 
     st.markdown("Start a conversation! The oracle will respond to you based on the toggled holy texts.")
 
-    query = st.text_input('Speak to me...', value= query, on_change=genesis)
+    query = st.text_input('Speak to me...', value= st.session_state.query, on_change=genesis)
 
-    # st.session_state.query = query
+    st.session_state.query = query
 
     # if query:
 
