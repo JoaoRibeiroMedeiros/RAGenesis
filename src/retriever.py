@@ -5,10 +5,11 @@ from src.embedder import encode
 from pymilvus import connections, Collection
 import numpy as np
 import json
+import random
 # Documents corpus (replace these with your actual documents)
 
 # Step 3: Create a function to retrieve similar data
-def retrieve_similar(collection, query_embedding, holy_texts, top_k=5):
+def retrieve_similar(collection, query_embedding, holy_texts, top_k):
     search_params = {
         "metric_type": "L2",  # Choose the similarity metric
         "params": {}
@@ -42,7 +43,7 @@ def from_query_results_to_dicts(results):
 
 
 
-def query_holy_text(ec2_public_ip, query):
+def query_holy_text(ec2_public_ip, query, text, top_k):
    
     # Step 1: Connect to Milvus
     connections.connect(alias="default", host=ec2_public_ip, port="19530")
@@ -53,14 +54,14 @@ def query_holy_text(ec2_public_ip, query):
     query_embedding = encode(query)
 
     collection.load()  # Load collection
-    results = retrieve_similar(collection, query_embedding)
+    results = retrieve_similar(collection, query_embedding, [text], top_k)
     results_as_dicts = from_query_results_to_dicts(results)
 
     return results_as_dicts
 
 # %%
 
-def query_many_holy_text(ec2_public_ip, query, holy_texts):
+def query_many_holy_text(ec2_public_ip, query, holy_texts, top_k):
    
     # Step 1: Connect to Milvus
     connections.connect(alias="default", host=ec2_public_ip, port="19530")
@@ -71,13 +72,14 @@ def query_many_holy_text(ec2_public_ip, query, holy_texts):
     query_embedding = encode(query)
 
     collection.load()  # Load collection
-    results = retrieve_similar(collection, query_embedding, holy_texts)
+
+    results = retrieve_similar(collection, query_embedding, holy_texts, top_k = top_k)
     results_as_dicts = from_query_results_to_dicts(results)
 
     return results_as_dicts
 
 
-def connect_and_query_holy_text(holy_texts, query, local=False):
+def connect_and_query_holy_texts(holy_texts, query, top_k, local=False):
 
     if local=='localdocker':
         ec2_public_ip = "host.docker.internal"
@@ -89,10 +91,34 @@ def connect_and_query_holy_text(holy_texts, query, local=False):
             config = json.load(file)
             ec2_public_ip = config['EC2_PUBLIC_IP']
 
-    results_as_dicts = query_many_holy_text(ec2_public_ip, query, holy_texts)
+    results_as_dicts = query_many_holy_text(ec2_public_ip, query, holy_texts, top_k)
     results_sources = [result["holytext"] for result in results_as_dicts]
     results_references = [result["reference"] for result in results_as_dicts]
     results_verses = [result["verse"] for result in results_as_dicts]
+    return results_sources, results_references, results_verses
+
+def connect_and_query_holy_texts_ecumenical(holy_texts, query, top_k, local=False):
+
+    if local=='localdocker':
+        ec2_public_ip = "host.docker.internal"
+    elif local=='local':
+        ec2_public_ip = "localhost"
+    else:
+        # Fetch the EC2 public IP
+        with open('config.json', 'r') as file:
+            config = json.load(file)
+            ec2_public_ip = config['EC2_PUBLIC_IP']
+
+    results_sources = [] 
+    results_references = []
+    results_verses = []
+
+    for text in random.shuffle(holy_texts):
+        results_as_dicts = query_holy_text(ec2_public_ip, query, text, top_k)
+        results_sources = results_sources + [result["holytext"] for result in results_as_dicts]
+        results_references = results_references + [result["reference"] for result in results_as_dicts]
+        results_verses = results_verses + [result["verse"] for result in results_as_dicts]
+
     return results_sources, results_references, results_verses
 
 
