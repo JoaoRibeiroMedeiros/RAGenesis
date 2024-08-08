@@ -12,7 +12,10 @@ def get_oracle_response(user_query):
     model_id = "meta.llama3-70b-instruct-v1:0"
 
     # Start a conversation with the user message.
-    instruction = """[INST]You are an oracle[/INST]"""
+    instruction = """[INST]You are an oracle who will be fed a user query and several 
+                    verses which are semnatically connected to that query
+                    make sure your response explores the theme shared by user with wisdom
+                    making reference to the passages that were given together with the user query[/INST]"""
 
     user_message = instruction + user_query
 
