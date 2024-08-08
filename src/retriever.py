@@ -113,7 +113,7 @@ def connect_and_query_holy_texts_ecumenical(holy_texts, query, top_k, local=Fals
     results_references = []
     results_verses = []
 
-    for text in random.shuffle(holy_texts):
+    for text in random.sample(holy_texts, len(holy_texts)):
         results_as_dicts = query_holy_text(ec2_public_ip, query, text, top_k)
         results_sources = results_sources + [result["holytext"] for result in results_as_dicts]
         results_references = results_references + [result["reference"] for result in results_as_dicts]
