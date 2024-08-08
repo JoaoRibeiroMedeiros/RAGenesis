@@ -52,8 +52,8 @@ Resources:
             sudo curl -sfL https://raw.githubusercontent.com/milvus-io/milvus/master/scripts/standalone_embed.sh -o standalone_embed.sh
             sudo bash standalone_embed.sh start
             aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 975050138131.dkr.ecr.us-east-1.amazonaws.com
-            sudo docker pull 975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest
-           # sudo docker run -d -p 8501:8501 975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest  - need AWS keys here, will do it manual
+          # sudo docker pull 975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest
+          # sudo docker run -d -p 8501:8501 975050138131.dkr.ecr.us-east-1.amazonaws.com/ragenesis:latest  - need AWS keys here, will do it manual
   MilvusSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
