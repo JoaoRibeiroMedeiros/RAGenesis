@@ -21,7 +21,7 @@ else:
     # Fetch the EC2 public IP
     ec2_public_ip = config['EC2_PUBLIC_IP']
     host = ec2_public_ip
-
+# %%
 
 # Documents corpus (replace these with your actual documents)
 
