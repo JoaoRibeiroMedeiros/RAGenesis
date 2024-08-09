@@ -12,7 +12,7 @@ dockerConfigJson: "eyJhdXRocyI6eyJzamMudnVsdHJjci5jb20iOnsiYXV0aCI6ImNtOWliM1FrW
 
 
 clusterIssuer: letsencrypt #todo: improve issuer name
-host: dev.api.genndoc.com  #your domain
+host: ragenesis.com  #your domain
 
 service:
   port: 8501  
