@@ -2,6 +2,7 @@
 .env_test
 .venv_st
 .venv_gr
+.aws-sam
 credentials
 cf-template/app/.aws-sam
 cf-template/iam/.aws-sam
