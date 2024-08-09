@@ -20,4 +20,18 @@ Quran reference:
  --------------------------------------------------------------------
 
 
+Bhagavad Gita reference:
+
+"Bhagavad-gita As It Is"
+by His Divine Grace A.C. Bhaktivedanta Swami Prabhupada.
+
+
+Analects reference:
+
+
+The Analects of Confucius 論語
+Translated by A. Charles Muller
+
+[Updated: 2021-12-01+09:00]
+
 
