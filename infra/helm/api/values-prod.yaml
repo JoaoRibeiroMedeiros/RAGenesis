@@ -1,27 +1,27 @@
-namespace: gendoc-prod
+namespace: ragenesis-prod
 
 replicaCount: 1 # only for now, prod should have at least 2
 
 image:
-  repository: sjc.vultrcr.com/gendocapi/gendoc-api-prod
+  repository: sjc.vultrcr.com/ # change the repo
   tag: latest
 
 imagePullSecretName: vultr-cr-credentials
 
 dockerConfigJson: "eyJhdXRocyI6eyJzamMudnVsdHJjci5jb20iOnsiYXV0aCI6ImNtOWliM1FrWjJWdVpHOWpZWEJwSzJJeE5EQmtaR1ppTFRZNFl6SXROREEyTmkxaE9HRmxMV0l3TlRVeE9ERTBNV1V3WkRwWGVIQkljbEptUkc1Q1dsRldURWRHT1VaME4wdDNTRUYxYW5WRk5URm1XZz09In19fQ=="
 
-clusterIssuer: letsencrypt-prod
-host: api.genndoc.com
+clusterIssuer: letsencrypt
+host: TBD #your domain
 
 service:
-  port: 8000
-  targetPort: 8000
+  port: 8501
+  targetPort: 8501
 
 deployment:
-  containerPort: 8000
+  containerPort: 8501
 
 ingress:
-  servicePort: 8000
+  servicePort: 8501
 
 resources:
   limits:

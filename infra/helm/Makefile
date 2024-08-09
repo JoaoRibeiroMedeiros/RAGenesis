@@ -1,28 +1,32 @@
 # Makefile for Helm deployments
 
-CHART_PATH_API = ./gendoc-api
-RELEASE_NAME = gendoc-api
+CHART_PATH_API = ./api
+RELEASE_NAME = ragenesis-api
+NAMESPACE=ragenesis
 
 .PHONY: all apidev apiqa apiprod
 
-all: apidev apiqa apiprod
+all: apidev apiqa apiprod ingress
+
+ingress:
+	helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
 
 apidev:
-	helm upgrade --install $(RELEASE_NAME)-dev $(CHART_PATH_API) -f $(CHART_PATH_API)/values-dev.yaml --namespace gendoc-dev --create-namespace
+	helm upgrade --install $(RELEASE_NAME)-dev $(CHART_PATH_API) -f $(CHART_PATH_API)/values-dev.yaml --namespace $(NAMESPACE)-dev --create-namespace
 
 apiqa:
-	helm upgrade --install $(RELEASE_NAME)-qa $(CHART_PATH_API) -f $(CHART_PATH_API)/values-qa.yaml --namespace gendoc-dev --create-namespace
+	helm upgrade --install $(RELEASE_NAME)-qa $(CHART_PATH_API) -f $(CHART_PATH_API)/values-qa.yaml --namespace $(NAMESPACE)-qa --create-namespace
 
 apiprod:
-	helm upgrade --install $(RELEASE_NAME)-prod $(CHART_PATH_API) -f $(CHART_PATH_API)/values-prod.yaml --namespace gendoc-dev --create-namespace
+	helm upgrade --install $(RELEASE_NAME)-prod $(CHART_PATH_API) -f $(CHART_PATH_API)/values-prod.yaml --namespace $(NAMESPACE)-prod --create-namespace
 
-clean-dev:
-	helm uninstall gendoc-api-dev
+cleandev:
+	 kubectl delete namespace <namespace …>
 
-clean-qa:
-	helm uninstall gendoc-api-qa
+cleanqa:
+	helm uninstall $(RELEASE_NAME)-qa
 
-clean-prod:
-	helm uninstall gendoc-api-prod
+cleanprod:
+	helm uninstall $(RELEASE_NAME)-prod
 
 clean: clean-dev clean-qa clean-prod

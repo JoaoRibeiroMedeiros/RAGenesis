@@ -21,7 +21,7 @@ local = False
 
 def landing_page(): 
 
-    st.title('Holy AI!')
+    st.title('Holy AI at K8!')
 
     st.markdown("""
 
