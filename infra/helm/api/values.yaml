@@ -1,0 +1,32 @@
+namespace: gendoc-prod
+
+replicaCount: 1
+
+image:
+  repository: sjc.vultrcr.com/gendocapi/gendoc-api
+  tag: latest
+
+imagePullSecretName: vultr-cr-credentials
+
+dockerConfigJson: "eyJhdXRocyI6eyJzamMudnVsdHJjci5jb20iOnsiYXV0aCI6ImNtOWliM1FrWjJWdVpHOWpZWEJwSzJJeE5EQmtaR1ppTFRZNFl6SXROREEyTmkxaE9HRmxMV0l3TlRVeE9ERTBNV1V3WkRwWGVIQkljbEptUkc1Q1dsRldURWRHT1VaME4wdDNTRUYxYW5WRk5URm1XZz09In19fQ=="
+
+clusterIssuer: letsencrypt
+host: api.genndoc.com
+
+service:
+  port: 8000
+  targetPort: 8000
+
+deployment:
+  containerPort: 8000
+
+ingress:
+  servicePort: 8000
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi

@@ -1,0 +1,32 @@
+namespace: gendoc-qa
+
+replicaCount: 1 # could have 2
+
+image:
+  repository: sjc.vultrcr.com/ # change the repo
+  tag: latest
+
+imagePullSecretName: vultr-cr-credentials
+
+dockerConfigJson: "eyJhdXRocyI6eyJzamMudnVsdHJjci5jb20iOnsiYXV0aCI6ImNtOWliM1FrWjJWdVpHOWpZWEJwSzJJeE5EQmtaR1ppTFRZNFl6SXROREEyTmkxaE9HRmxMV0l3TlRVeE9ERTBNV1V3WkRwWGVIQkljbEptUkc1Q1dsRldURWRHT1VaME4wdDNTRUYxYW5WRk5URm1XZz09In19fQ=="
+
+clusterIssuer: letsencrypt
+host: TBD
+
+service:
+  port: 8000
+  targetPort: 8000
+
+deployment:
+  containerPort: 8000
+
+ingress:
+  servicePort: 8000
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 384Mi
+  requests:
+    cpu: 150m
+    memory: 192Mi

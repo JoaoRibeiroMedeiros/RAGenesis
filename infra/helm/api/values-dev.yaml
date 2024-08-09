@@ -1,0 +1,32 @@
+namespace: gendoc-dev
+
+replicaCount: 1
+
+image:
+  repository: sjc.vultrcr.com/gendocapi/gendoc-api-dev # todo: improve this regirstry name 
+  tag: latest
+
+imagePullSecretName: vultr-cr-credentials
+
+dockerConfigJson: "eyJhdXRocyI6eyJzamMudnVsdHJjci5jb20iOnsiYXV0aCI6ImNtOWliM1FrWjJWdVpHOWpZWEJwSzJJeE5EQmtaR1ppTFRZNFl6SXROREEyTmkxaE9HRmxMV0l3TlRVeE9ERTBNV1V3WkRwWGVIQkljbEptUkc1Q1dsRldURWRHT1VaME4wdDNTRUYxYW5WRk5URm1XZz09In19fQ=="
+
+clusterIssuer: letsencrypt-prod #todo: improve issuer name
+host: dev.api.genndoc.com 
+
+service:
+  port: 8000  
+  targetPort: 8000
+
+deployment:
+  containerPort: 8000
+
+ingress:
+  servicePort: 8000
+
+resources:
+  limits:
+    cpu: 400m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
